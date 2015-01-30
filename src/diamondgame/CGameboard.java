@@ -9,17 +9,18 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
+
 public class CGameboard extends javax.swing.JFrame {
 
-    private final int mWidth;
-    private final int mHeight;
-    private CPos mFirstActive;
-    private CPos mSecondActive;
-    private JPanel desktop;
-    private static ArrayList<ArrayList<CDiamond>> items;
-    private int totalDiamonds;
-    private ArrayList<Color> mAllColors;
-    private static final String version = "0.3";
+    private final int mWidth; //width of gameboard
+    private final int mHeight; //height of gameboard
+    private CPos mFirstActive; //position of active diamond (after first choose by clicking on it)
+    private CPos mSecondActive; //position of second diamond (only needed for swapping with mFirstActive so far)
+    private JPanel desktop; //stores all buttons/diamonds for displaying
+    private static ArrayList<ArrayList<CDiamond>> items; //stores diamonds for access
+    private int totalDiamonds; //just mWidth*mHeight for shorter notation
+    private ArrayList<Color> mAllColors; //all possible collors for diamonds
+    private static final String version = "0.3"; //actual version
 
     public CGameboard() {
         super.setTitle("Diamanty verze " + version);  //title setup
@@ -33,54 +34,140 @@ public class CGameboard extends javax.swing.JFrame {
         return 0;
     }
 
+    /**
+     * Calls "deleteMe" of given diamond.
+     *
+     * set isValid to false and color to white
+     *
+     * Use {@link #CleanDiamonds(ArrayList<CPos> positions)} . to get diamonds.
+     *
+     * @param pos -position of item to destroy
+     * @return
+     */
     public void destroyGem(CPos pos) {
         GetItem(pos).deleteMe();
     }
 
-    public CDiamond GetItem(int x, int y){
-    return items.get(x).get(y);
+    /**
+     * Gets specific item from "items".
+     *
+     * Use {@link #fall(CPos pos)} to get diamonds. Use {@link #initGameboard()}
+     * to get diamonds.
+     *
+     * @param x - X coordinate in "items"
+     * @param y - Y coordinate in "items"
+     * @return selected item from [X,Y] position
+     */
+    public CDiamond GetItem(int x, int y) {
+        return items.get(x).get(y);
     }
-    
-    public CDiamond GetItem(CPos pos){
-    return items.get(pos.x).get(pos.y);
+
+    /**
+     * Gets specific item from "items".
+     *
+     * Use {@link #destroyGem(CPos pos)} to get diamonds.
+     *
+     * @param pos - Coordinates of item
+     * @return selected item from [X,Y] position
+     */
+    public CDiamond GetItem(CPos pos) {
+        return items.get(pos.x).get(pos.y);
     }
-    
-    public void SetItem(int x, int y, CDiamond diamond){
-        if(x>0 && y>0)
-    items.get(x).set(y, diamond);
+
+    /**
+     * Sets specific gem to position [X,Y].
+     *
+     *
+     * @param x - X coordinate in "items"
+     * @param y - Y coordinate in "items"
+     * @param diamond - place this item to [x,y] into "items"
+     * @return 
+     */
+    public void SetItem(int x, int y, CDiamond diamond) {
+        if (x > 0 && y > 0) {
+            items.get(x).set(y, diamond);
+        }
     }
-    
-    public void SetItem(CPos pos, CDiamond diamond){
-        if(pos.x > 0 && pos.y > 0){
-    items.get(pos.x).set(pos.y, diamond);
+
+    /**
+     * Sets specific gem to position [pos].
+     *
+     * Use {@link #swap(CDiamond first, CDiamond second)}. Use
+     * {@link #fall(Cpos pos)}.
+     *
+     * @param pos - Coordinates of item
+     * @param diamond - place this item to [pos] into "items"
+     * @return 
+     */
+    public void SetItem(CPos pos, CDiamond diamond) {
+        if (pos.x > 0 && pos.y > 0) {
+            items.get(pos.x).set(pos.y, diamond);
         }
     }
     
+      /**
+     * Swaps first and second diamonds.
+     *
+     * Use {@link #fall(CPos pos)}.
+     *
+     * @param first  - first diamond
+     * @param second - second diamond
+     * @return 
+     */
+
     public void swap(CDiamond first, CDiamond second) {
-        if(CDiamondGame.DEBUG)System.out.println("SWAPPING :-)");
-        
-        //O co tady jde? prvne nastavujes referenci tmpGem na first, a pak provadis nakej Set
+        if (CDiamondGame.DEBUG) {
+            System.out.println("SWAPPING :-)");
+        }
         CDiamond tmpGem = first;
-        //CDiamond tmpGem=new CDiamond(Color.yellow, first.mMobility, first.mPos);
         SetItem(first.getPos(), second);
         SetItem(second.getPos(), tmpGem);
-
         return;
     }
+    
 
-    public CDiamond generateRandDiamond() {
+          /**
+     * Generates random diamond.
+     * 
+     * Use {@link #fall(CPos pos)}.
+     * @return generated diamond
+     */
+     public CDiamond generateRandDiamond() {
         Color Dcolor = mAllColors.get((int) (Math.random() * mAllColors.size()));
         CPos tmppos = new CPos(-2, -2);
         return new CDiamond(Dcolor, true, tmppos);
     }
 
-    public void generateDiamond(int IDofDiamondType) {
+     /**
+     * NOT IMPLEMENTED YET!
+     * 
+     * Generates random diamond based on ID of diamond types.
+     * for example ID 1-10 =classic diamonds, 11 = wall...
+     * 
+     * @return generated diamond
+     */
+     
+    public CDiamond generateDiamond(int IDofDiamondType) {
         //to implement
+        return new CDiamond(Color.yellow, 666<667, mFirstActive); //just random diamond before implementation of this method
     }
 
+     /**
+     * fills empty place after destroyed gem.
+     *
+     * finds nearest upper valid gems and puts them down to fill empty space
+     * 
+     * if no upper valid gem is available, generate new random gem and put it here
+     * 
+     * Use {@link #checkAll()}.
+     *
+     * @param pos  - position of destroyed gem to be filled
+     * @return 
+     */
+    
     public void fall(CPos pos) {
         int upper = pos.y - 1;
-        for (; upper >= 0 && !GetItem(pos.x,upper).isValid; upper--) {
+        for (; upper >= 0 && !GetItem(pos.x, upper).isValid; upper--) {
             //this finds first upper valid diamond
         }
         if (upper < 0) {//no valid gems above
@@ -89,21 +176,33 @@ public class CGameboard extends javax.swing.JFrame {
             tmp.mPos.setXY(pos.x, pos.y);
             //swap(items.get(pos.getX()).get(pos.getY()), tmp);
             SetItem(pos, tmp);//Nechapu vyznam
-            System.out.println("falling new " + upper + " on " + pos.y + " ("+pos.x+")");
+            System.out.println("falling new " + upper + " on " + pos.y + " (" + pos.x + ")");
             return;
         } else {
             swap(items.get(pos.x).get(pos.y), items.get(pos.x).get(upper));//now the upper gem will be invalid
-            System.out.println("falling " + upper + " on " + pos.y + " ("+pos.x+")");
+            System.out.println("falling " + upper + " on " + pos.y + " (" + pos.x + ")");
             return;
         }
     }
+    
+     /**
+     * Check the whole gameboard for invalid/destroyed gems.
+     *
+     * as result of this method, the whole gameboard should be valid
+     * 
+     * Use {@link #initGameboard()}.
+     *
+     * @param
+     * @return 
+     */
+    
 
     public void checkAll() { //projed vsechny odspoda, kdyz je nekde prazdno tak shod zezhora a projed nakonci znovu
         boolean changed = false;
         do {
             changed = false;
             for (int i = 0; i < items.size(); i++) {//from left to right
-                for (int j = items.get(i).size()-1; j >= 0; j--) { //from bottom to top
+                for (int j = items.get(i).size() - 1; j >= 0; j--) { //from bottom to top
                     if (!items.get(i).get(j).isValid) {
                         CPos pos = new CPos(i, j);
                         fall(pos);
@@ -120,6 +219,17 @@ public class CGameboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
     }
 
+         /**
+     * Here you can add colors of gems
+     *
+     * as result of this method, the whole gameboard should be valid
+     * 
+     * Use {@link #initGameboard()}.
+     *
+     * @param
+     * @return 
+     */
+    
     private void initColors() {
         mAllColors = new ArrayList<>();
         mAllColors.add(Color.red);
@@ -129,9 +239,21 @@ public class CGameboard extends javax.swing.JFrame {
         mAllColors.add(Color.pink);
     }
 
+    
+     /**
+     * Initialize of whole gameboard
+     *
+     * set size of gameboard, initialize colors, generate all gems...
+     * 
+     * Use {@link #CGameboard()}.
+     *
+     * @param
+     * @return 
+     */
+    
     private void initGameboard() {
 
-        mFirstActive  = new CPos(-1, -1);
+        mFirstActive = new CPos(-1, -1);
         mSecondActive = new CPos(-1, -1);
         totalDiamonds = mWidth * mHeight;
 
@@ -139,10 +261,10 @@ public class CGameboard extends javax.swing.JFrame {
         items = new ArrayList<ArrayList<CDiamond>>();
         CDiamond diamond;
         ButtonGroup group = new ButtonGroup();
-        for (int i = 0; i < mWidth; i++){ //initialize columns in the first row
-        items.add(new ArrayList<CDiamond>());
+        for (int i = 0; i < mWidth; i++) { //initialize columns in the first row
+            items.add(new ArrayList<CDiamond>());
         }
-        
+
         for (int i = 0; i < totalDiamonds; i++) {
             diamond = generateRandDiamond();
             //diamond = new CDiamond(Color.BLUE, true, i); //various
@@ -153,7 +275,7 @@ public class CGameboard extends javax.swing.JFrame {
             CPos pos;
 
             diamond.mPos.setXY(i % mWidth, i / mWidth);
-            
+
             items.get(i % mWidth).add(diamond); //adding diamonds from left to right
             group.add(diamond);
         }
@@ -175,14 +297,14 @@ public class CGameboard extends javax.swing.JFrame {
             int x = i % mWidth;
             int y = i / mWidth;
             desktop.add(items.get(x).get(y));
-            if(CDiamondGame.DEBUG){
-            //items.get(x).get(y).draw();
-                GetItem(x,y).drawPos(new CPos(x, y));
+            if (CDiamondGame.DEBUG) {
+                //items.get(x).get(y).draw();
+                GetItem(x, y).drawPos(new CPos(x, y));
             }
         }
 
         desktop.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-   
+
         checkAll();
     }
 
@@ -195,7 +317,7 @@ public class CGameboard extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             CDiamond diamond = (CDiamond) e.getSource();
 
-            System.out.println("pos("+diamond.getPos().x+","+diamond.getPos().y+") clicked");
+            System.out.println("pos(" + diamond.getPos().x + "," + diamond.getPos().y + ") clicked");
             if (!diamond.mMobility) { // cant move this piece bro :-( You just cant move walls and laws
                 return;
             }
@@ -261,7 +383,7 @@ public class CGameboard extends javax.swing.JFrame {
         }
         int mostLeft = left;
         int widthColor = 1;
-        while ((left + 1) < mWidth  /*end of row*/ && items.get(left + 1).get(Active.y).getColor() == refColor) {
+        while ((left + 1) < mWidth /*end of row*/ && items.get(left + 1).get(Active.y).getColor() == refColor) {
             left++;
             widthColor++;
         }
@@ -269,13 +391,13 @@ public class CGameboard extends javax.swing.JFrame {
 
         //find the lowest diamond of the same color
         int up = Active.y;
-        while (up - 1 >= 0 && items.get(Active.x).get(up-1).getColor() == refColor) {
-            System.out.println("porovnavam nahore s: " + items.get(Active.x).get(up-1).getColor());
-            up --;
+        while (up - 1 >= 0 && items.get(Active.x).get(up - 1).getColor() == refColor) {
+            System.out.println("porovnavam nahore s: " + items.get(Active.x).get(up - 1).getColor());
+            up--;
         }
         int mostUp = up;
         int heightColor = 1;
-        while ((up +1) < mHeight && items.get(Active.x).get(up +1).getColor() == refColor) {
+        while ((up + 1) < mHeight && items.get(Active.x).get(up + 1).getColor() == refColor) {
             up++;
             heightColor++;
         }
@@ -292,7 +414,7 @@ public class CGameboard extends javax.swing.JFrame {
 
         if (heightColor >= 3) {
             vertMatch = true;
-            for (int j = mostUp; j <= mostDown; j ++) {
+            for (int j = mostUp; j <= mostDown; j++) {
                 CPos pos = new CPos(Active.x, j);
                 neighbours.add(pos);
             }
@@ -326,9 +448,11 @@ public class CGameboard extends javax.swing.JFrame {
     }
 
     private void selectDiamond(CPos pos) {
-        if(pos.x < 0 || pos.y < 0){
-        if(CDiamondGame.DEBUG) {System.out.println("SELECTING bad diamond bro");}
-        return;
+        if (pos.x < 0 || pos.y < 0) {
+            if (CDiamondGame.DEBUG) {
+                System.out.println("SELECTING bad diamond bro");
+            }
+            return;
         }
         mFirstActive = pos;
         //items.get(diamondID).setBorder(BorderFactory.createLineBorder(Color.green, 4)); //change active diamond to green
@@ -342,13 +466,13 @@ public class CGameboard extends javax.swing.JFrame {
         if (mSecondActive.x >= 0) {
             items.get(mSecondActive.x).get(mSecondActive.y).deselectMe();
         }
-        
-        if(pos.x >=0 && pos.y >=0){
-        CPos p = new CPos(-1, -1);
-        mFirstActive  = p;
-        mSecondActive = p;
-        //  items.get(diamondID).setBorder(BorderFactory.createEmptyBorder()); //change active diamond to green
-        items.get(pos.x).get(pos.y).deselectMe();
+
+        if (pos.x >= 0 && pos.y >= 0) {
+            CPos p = new CPos(-1, -1);
+            mFirstActive = p;
+            mSecondActive = p;
+            //  items.get(diamondID).setBorder(BorderFactory.createEmptyBorder()); //change active diamond to green
+            items.get(pos.x).get(pos.y).deselectMe();
         }
         return;
     }
