@@ -236,6 +236,7 @@ public class CGameboard extends javax.swing.JFrame {
                 }
                 deselectDiamond(mFirstActive);
                 CleanDiamonds(toRemove);
+                /*tady se cykli*/
                 checkAll();
             } else {
                 deselectDiamond(mFirstActive);

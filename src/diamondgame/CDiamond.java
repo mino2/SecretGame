@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.border.Border;
 
 public class CDiamond extends JButton {
-
+ 
     private Color mColor;
     public boolean mMobility;
  //   public int mID;
