@@ -6,15 +6,14 @@ import javax.swing.JButton;
 import javax.swing.border.Border;
 
 public class CDiamond extends JButton {
-
-    private Color mColor; //color of gem
+//pak dat private
+    public Color mColor; //color of gem
     public boolean mMobility; //true if can be moved, false if wall
     //   public int mID;
     public boolean isValid; //true if valid, false if destroyed
     private static final Border mSelectedBorder = BorderFactory.createLineBorder(Color.green, 4); //border around selected gem
     //private static final Border mNormalBorder = BorderFactory.createEmptyBorder();
     private static final Border mNormalBorder = BorderFactory.createLineBorder(Color.red, 1); //border around all gems
-    CPos mPos; //position of this gem
 
     
      /**
@@ -25,11 +24,10 @@ public class CDiamond extends JButton {
      * @param pos position of gem
      * @return new gem
      */
-    public CDiamond(Color color, boolean mobility, CPos pos) {
+    public CDiamond(Color color, boolean mobility) {
         setColor(color);
         mMobility = mobility;
         //      mID = ID;
-        mPos = pos;
         isValid = true;
     }
 
@@ -81,8 +79,10 @@ public class CDiamond extends JButton {
      * @param 
      * @return 
      */
+    
+            
     public void draw() {
-        setText("a");
+        setColor(mColor);
     }
 
      /**
@@ -120,23 +120,4 @@ public class CDiamond extends JButton {
         isValid = true;
     }
 
-         /**
-     * transform diamond into the given one
-     *
-     * @param diamond my example design to get on me
-     * @return 
-     */
-    
-    public void transformMe(CDiamond diamond) {
-        setColor(diamond.mColor);
-        mMobility = diamond.mMobility;
-        isValid = diamond.isValid;
-        mPos.x = diamond.mPos.x;
-        mPos.y = diamond.mPos.y;
-        //other attributes
-    }
-
-    public CPos getPos() {
-        return mPos;
-    }
 }
