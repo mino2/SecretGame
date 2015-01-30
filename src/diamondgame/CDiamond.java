@@ -1,22 +1,26 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package diamondgame;
 
 import java.awt.Color;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.border.Border;
 
-public class CDiamond extends JButton {
-//pak dat private
+/**
+ *
+ * @author Jirka
+ */
+public class CDiamond {
+    
+    //pak dat private
     public Color mColor; //color of gem
     public boolean mMobility; //true if can be moved, false if wall
     //   public int mID;
     public boolean isValid; //true if valid, false if destroyed
-    private static final Border mSelectedBorder = BorderFactory.createLineBorder(Color.green, 4); //border around selected gem
-    //private static final Border mNormalBorder = BorderFactory.createEmptyBorder();
-    private static final Border mNormalBorder = BorderFactory.createLineBorder(Color.red, 1); //border around all gems
-
     
-     /**
+    
+         /**
      * constructor
      * 
      * @param color color of new gem
@@ -24,13 +28,13 @@ public class CDiamond extends JButton {
      * @param pos position of gem
      * @return new gem
      */
-    public CDiamond(Color color, boolean mobility) {
-        setColor(color);
+        public CDiamond(Color color, boolean mobility) {
+        mColor=color;
         mMobility = mobility;
         //      mID = ID;
         isValid = true;
     }
-
+        
      /**
      * returns mMobility
      *
@@ -43,83 +47,14 @@ public class CDiamond extends JButton {
         return mMobility;
     }
 
-    public void setColor(Color c) {
-        this.setBackground(c);
-        mColor = c;
-    }
+
 
     public Color getColor() {
         return mColor;
     }
 
-    /**
-     * change border color only to mSelectedBorder
-     *
-     * @param 
-     * @return 
-     */
+    public boolean isValid() {
+        return isValid;
+    }
     
-    public void selectMe() {
-        this.setBorder(mSelectedBorder);
-    }
-
-        /**
-     * change border color only to mNormalBorder
-     *
-     * @param 
-     * @return 
-     */
-    public void deselectMe() {
-        this.setBorder(mNormalBorder);
-    }
-
-     /**
-     * set some text into gem
-     *
-     * @param 
-     * @return 
-     */
-    
-            
-    public void draw() {
-        setColor(mColor);
-        System.out.println(""+getBackground());
-    }
-
-     /**
-     * write position into gem
-     *
-     * @param pos given position
-     * @return 
-     */
-    public void drawPos(CPos pos) {
-        setText(pos.x + "/" + pos.y);
-    }
-
-     /**
-     * set validity to 0 and color to white
-     *
-     * @param
-     * @return 
-     */
-    
-    public void deleteMe() {
-        isValid = false;
-        //setColor(null);
-        setColor(Color.WHITE);
-        draw();
-    }
-
-     /**
-     * set gem as valid and gives it a color
-     *
-     * @param color new color of gem
-     * @return 
-     */
-    
-    public void createMe(Color color) {
-        setColor(color);
-        isValid = true;
-    }
-
 }
