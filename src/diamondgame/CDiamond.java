@@ -83,6 +83,7 @@ public class CDiamond extends JButton {
             
     public void draw() {
         setColor(mColor);
+        System.out.println(""+getBackground());
     }
 
      /**
@@ -106,6 +107,7 @@ public class CDiamond extends JButton {
         isValid = false;
         //setColor(null);
         setColor(Color.WHITE);
+        draw();
     }
 
      /**

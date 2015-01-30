@@ -218,7 +218,6 @@ public class CGameboard extends javax.swing.JFrame {
                     if (!items.get(i).get(j).isValid) {
                         CPos pos = new CPos(i, j);
                         fall(pos); 
-                        items.get(i).get(j).draw();
                         System.out.println("After fall "+items.get(i).get(j).mColor);
                         changed = true;
                     }
@@ -320,14 +319,11 @@ public class CGameboard extends javax.swing.JFrame {
 
     private class ActionListenerDiamond implements ActionListener {
 
-        private ActionListenerDiamond() {
-        }
-
+        
         @Override
         public void actionPerformed(ActionEvent e) {
             CDiamond diamond = (CDiamond) e.getSource();
             CPos clickDiamond=findDiamond(diamond); 
-            drawDiamonds();
             if (!diamond.mMobility) { // cant move this piece bro :-( You just cant move walls and laws
                 return;
             }
@@ -345,7 +341,7 @@ public class CGameboard extends javax.swing.JFrame {
                 boolean success1 = false;
                 boolean success2 = false;
                 ArrayList<CPos> toRemove = new ArrayList<>();
-                swap(items.get(mFirstActive.x).get(mFirstActive.y), items.get(mSecondActive.x).get(mSecondActive.y));
+                swap(mFirstActive,mSecondActive);
 
                 if (tryDiamond(mFirstActive)) {
                     success1 = true;
@@ -355,7 +351,7 @@ public class CGameboard extends javax.swing.JFrame {
                 }
 
                 if (!success1 && !success2) {//bad move, return back
-                    swap(items.get(mFirstActive.x).get(mFirstActive.y), items.get(mSecondActive.x).get(mSecondActive.y));
+                    swap(mFirstActive,mSecondActive);
                     return;
                 }
 
@@ -367,8 +363,8 @@ public class CGameboard extends javax.swing.JFrame {
                 }
                 deselectDiamond(mFirstActive);
                 CleanDiamonds(toRemove);
-                /*tady se cykli*/
                 checkAll();
+                drawDiamonds();
             } else {
                 deselectDiamond(mFirstActive);
                 selectDiamond(clickDiamond);
