@@ -51,7 +51,7 @@ public class CDiamond extends JButton {
     }
     
     public void drawPos(CPos pos) {
-        setText(pos.getX()+"/"+pos.getY());
+        setText(pos.x+"/"+pos.y);
     }
 
     public void deleteMe() {
@@ -69,8 +69,8 @@ public class CDiamond extends JButton {
     setColor(diamond.mColor);
     mMobility = diamond.mMobility;
     isValid = diamond.isValid;
-    mPos.x = diamond.mPos.getX();
-    mPos.y = diamond.mPos.getY();
+    mPos.x = diamond.mPos.x;
+    mPos.y = diamond.mPos.y;
     //other attributes
     }
     

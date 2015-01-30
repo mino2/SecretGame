@@ -5,12 +5,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -47,7 +42,7 @@ public class CGameboard extends javax.swing.JFrame {
     }
     
     public CDiamond GetItem(CPos pos){
-    return items.get(pos.getX()).get(pos.getY());
+    return items.get(pos.x).get(pos.y);
     }
     
     public void SetItem(int x, int y, CDiamond diamond){
@@ -56,17 +51,20 @@ public class CGameboard extends javax.swing.JFrame {
     }
     
     public void SetItem(CPos pos, CDiamond diamond){
-        if(pos.getX() > 0 && pos.getY() > 0){
-    items.get(pos.getX()).set(pos.getY(), diamond);
+        if(pos.x > 0 && pos.y > 0){
+    items.get(pos.x).set(pos.y, diamond);
         }
     }
     
     public void swap(CDiamond first, CDiamond second) {
         if(CDiamondGame.DEBUG)System.out.println("SWAPPING :-)");
         
+        //O co tady jde? prvne nastavujes referenci tmpGem na first, a pak provadis nakej Set
         CDiamond tmpGem = first;
+        //CDiamond tmpGem=new CDiamond(Color.yellow, first.mMobility, first.mPos);
         SetItem(first.getPos(), second);
         SetItem(second.getPos(), tmpGem);
+
         return;
     }
 
@@ -81,21 +79,21 @@ public class CGameboard extends javax.swing.JFrame {
     }
 
     public void fall(CPos pos) {
-        int upper = pos.getY() - 1;
-        for (; upper >= 0 && !GetItem(pos.getX(),upper).isValid; upper--) {
+        int upper = pos.y - 1;
+        for (; upper >= 0 && !GetItem(pos.x,upper).isValid; upper--) {
             //this finds first upper valid diamond
         }
         if (upper < 0) {//no valid gems above
             //generate new gem
             CDiamond tmp = generateRandDiamond();
-            tmp.mPos.setXY(pos.getX(), pos.getY());
+            tmp.mPos.setXY(pos.x, pos.y);
             //swap(items.get(pos.getX()).get(pos.getY()), tmp);
-            SetItem(pos, tmp);
-            System.out.println("falling new " + upper + " on " + pos.getY() + " ("+pos.getX()+")");
+            SetItem(pos, tmp);//Nechapu vyznam
+            System.out.println("falling new " + upper + " on " + pos.y + " ("+pos.x+")");
             return;
         } else {
-            swap(items.get(pos.getX()).get(pos.getY()), items.get(pos.getX()).get(upper));//now the upper gem will be invalid
-            System.out.println("falling " + upper + " on " + pos.getY() + " ("+pos.getX()+")");
+            swap(items.get(pos.x).get(pos.y), items.get(pos.x).get(upper));//now the upper gem will be invalid
+            System.out.println("falling " + upper + " on " + pos.y + " ("+pos.x+")");
             return;
         }
     }
@@ -202,7 +200,7 @@ public class CGameboard extends javax.swing.JFrame {
                 return;
             }
 
-            if (mFirstActive.getX() < 0 || mFirstActive.getY() < 0 || diamond.getPos() == mFirstActive) {
+            if (mFirstActive.x < 0 || mFirstActive.y < 0 || diamond.getPos() == mFirstActive) {
                 deselectDiamond(mFirstActive);
                 deselectDiamond(mSecondActive);
                 selectDiamond(diamond.getPos());
@@ -214,7 +212,7 @@ public class CGameboard extends javax.swing.JFrame {
                 boolean success1 = false;
                 boolean success2 = false;
                 ArrayList<CPos> toRemove = new ArrayList<>();
-                swap(items.get(mFirstActive.getX()).get(mFirstActive.getY()), items.get(mSecondActive.getX()).get(mSecondActive.getY()));
+                swap(items.get(mFirstActive.x).get(mFirstActive.y), items.get(mSecondActive.x).get(mSecondActive.y));
 
                 if (tryDiamond(mFirstActive)) {
                     success1 = true;
@@ -224,7 +222,7 @@ public class CGameboard extends javax.swing.JFrame {
                 }
 
                 if (!success1 && !success2) {//bad move, return back
-                    swap(items.get(mFirstActive.getX()).get(mFirstActive.getY()), items.get(mSecondActive.getX()).get(mSecondActive.getY()));
+                    swap(items.get(mFirstActive.x).get(mFirstActive.y), items.get(mSecondActive.x).get(mSecondActive.y));
                     return;
                 }
 
@@ -249,34 +247,34 @@ public class CGameboard extends javax.swing.JFrame {
     private ArrayList<CPos> getNeighboursToDelete(CPos Active) {
         ArrayList<CPos> neighbours = new ArrayList<>();
 
-        Color refColor = items.get(Active.getX()).get(Active.getY()).getColor();
+        Color refColor = items.get(Active.x).get(Active.y).getColor();
         System.out.println("refColor je: " + refColor);
         boolean horMatch = false;
         boolean vertMatch = false;
 
         //find the most left diamond of the same color
-        int left = Active.getX();
-        while (left > 0 && items.get(left - 1).get(Active.getY()).getColor() == refColor) {
-            System.out.println("porovnavam vlevo s: " + items.get(left - 1).get(Active.getY()).getColor());
+        int left = Active.x;
+        while (left > 0 && items.get(left - 1).get(Active.y).getColor() == refColor) {
+            System.out.println("porovnavam vlevo s: " + items.get(left - 1).get(Active.y).getColor());
             left--;
         }
         int mostLeft = left;
         int widthColor = 1;
-        while ((left + 1) < mWidth  /*end of row*/ && items.get(left + 1).get(Active.getY()).getColor() == refColor) {
+        while ((left + 1) < mWidth  /*end of row*/ && items.get(left + 1).get(Active.y).getColor() == refColor) {
             left++;
             widthColor++;
         }
         int mostRight = left;
 
         //find the lowest diamond of the same color
-        int up = Active.getY();
-        while (up - 1 >= 0 && items.get(Active.getX()).get(up-1).getColor() == refColor) {
-            System.out.println("porovnavam nahore s: " + items.get(Active.getX()).get(up-1).getColor());
+        int up = Active.y;
+        while (up - 1 >= 0 && items.get(Active.x).get(up-1).getColor() == refColor) {
+            System.out.println("porovnavam nahore s: " + items.get(Active.x).get(up-1).getColor());
             up --;
         }
         int mostUp = up;
         int heightColor = 1;
-        while ((up +1) < mHeight && items.get(Active.getX()).get(up +1).getColor() == refColor) {
+        while ((up +1) < mHeight && items.get(Active.x).get(up +1).getColor() == refColor) {
             up++;
             heightColor++;
         }
@@ -286,7 +284,7 @@ public class CGameboard extends javax.swing.JFrame {
         if (widthColor >= 3) {
             horMatch = true;
             for (int i = mostLeft; i <= mostRight; i++) {
-                CPos pos = new CPos(i, Active.getY());
+                CPos pos = new CPos(i, Active.y);
                 neighbours.add(pos);
             }
         }
@@ -294,7 +292,7 @@ public class CGameboard extends javax.swing.JFrame {
         if (heightColor >= 3) {
             vertMatch = true;
             for (int j = mostUp; j <= mostDown; j ++) {
-                CPos pos = new CPos(Active.getX(), j);
+                CPos pos = new CPos(Active.x, j);
                 neighbours.add(pos);
             }
         }
@@ -317,39 +315,39 @@ public class CGameboard extends javax.swing.JFrame {
     }
 
     private boolean isNeighbour(CPos first, CPos second) {
-        if (Math.abs(first.getX() - second.getX()) == 1 && first.getY() == second.getY()) {
+        if (Math.abs(first.x - second.x) == 1 && first.y == second.y) {
             return true;
         }
-        if (Math.abs(first.getY() - second.getY()) == 1 && first.getX() == second.getX()) {
+        if (Math.abs(first.y - second.y) == 1 && first.x == second.x) {
             return true;
         }
         return false;
     }
 
     private void selectDiamond(CPos pos) {
-        if(pos.getX() < 0 || pos.getY() < 0){
+        if(pos.x < 0 || pos.y < 0){
         if(CDiamondGame.DEBUG) {System.out.println("SELECTING bad diamond bro");}
         return;
         }
         mFirstActive = pos;
         //items.get(diamondID).setBorder(BorderFactory.createLineBorder(Color.green, 4)); //change active diamond to green
-        items.get(pos.getX()).get(pos.getY()).selectMe();
+        items.get(pos.x).get(pos.y).selectMe();
     }
 
     private void deselectDiamond(CPos pos) {
-        if (mFirstActive.getX() >= 0) {
-            items.get(mFirstActive.getX()).get(mFirstActive.getY()).deselectMe();
+        if (mFirstActive.x >= 0) {
+            items.get(mFirstActive.x).get(mFirstActive.y).deselectMe();
         }
-        if (mSecondActive.getX() >= 0) {
-            items.get(mSecondActive.getX()).get(mSecondActive.getY()).deselectMe();
+        if (mSecondActive.x >= 0) {
+            items.get(mSecondActive.x).get(mSecondActive.y).deselectMe();
         }
         
-        if(pos.getX() >=0 && pos.getY() >=0){
+        if(pos.x >=0 && pos.y >=0){
         CPos p = new CPos(-1, -1);
         mFirstActive  = p;
         mSecondActive = p;
         //  items.get(diamondID).setBorder(BorderFactory.createEmptyBorder()); //change active diamond to green
-        items.get(pos.getX()).get(pos.getY()).deselectMe();
+        items.get(pos.x).get(pos.y).deselectMe();
         }
         return;
     }
