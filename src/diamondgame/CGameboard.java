@@ -217,6 +217,18 @@ public class CGameboard extends javax.swing.JFrame {
                     }
                 }
             }
+            
+           for (int i = 0; i < items.size(); i++) {//from left to right
+                for (int j = items.get(i).size() - 1; j >= 0; j--) { //from bottom to top
+                    if (tryDiamond(new CPos(i,j))) {
+                        CPos pos = new CPos(i, j);
+                        CleanDiamonds(getNeighboursToDelete(pos));
+                        //System.out.println("After fall "+items.get(i).get(j).mColor);
+                        changed = true;
+                    }
+                }
+            }
+            
         } while (changed);
     }
 
