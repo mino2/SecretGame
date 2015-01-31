@@ -2,12 +2,17 @@ package diamondgame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -21,10 +26,13 @@ public class CGameboard extends javax.swing.JFrame {
     private CPos mFirstActive; //position of active place (after first choose by clicking on it)
     private CPos mSecondActive; //position of second place (only needed for swapping with mFirstActive so far)
     private JPanel desktop; //stores all buttons/diamonds for displaying
+    private JPanel menu;
+    private JLabel scoreLabel;
     private static ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
     private int totalDiamonds; //just mWidth*mHeight for shorter notation
     private ArrayList<Color> mAllColors; //all possible collors for diamonds
     private static final String version = "0.3"; //actual version
+    private CPlayer player;
 
     /**
      *
@@ -228,8 +236,14 @@ public class CGameboard extends javax.swing.JFrame {
                     }
                 }
             }
+           /* try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CGameboard.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
             
         } while (changed);
+        drawDiamonds();
     }
 
     private void initComponents() {
@@ -278,7 +292,7 @@ public class CGameboard extends javax.swing.JFrame {
         initColors();
         items = new ArrayList<>();
         CPlace place;
-        ButtonGroup group =new ButtonGroup();
+       // ButtonGroup group =new ButtonGroup();
         for (int i = 0; i < mWidth; i++) { //initialize columns in the first row
             items.add(new ArrayList<CPlace>());
         }
@@ -292,7 +306,7 @@ public class CGameboard extends javax.swing.JFrame {
             place.deselectMe();
 
             items.get(i % mWidth).add(place); //adding diamonds from left to right
-            group.add(place);
+        //    group.add(place);
         }
 
         //nastaveni layoutu
@@ -305,7 +319,17 @@ public class CGameboard extends javax.swing.JFrame {
          add(plocha, BorderLayout.CENTER);
 
          plocha.setLayout(new GridLayout(3, 3));*/
+        
+        player=new CPlayer();
+        
+        menu=new JPanel();
         desktop = new JPanel();
+        
+        menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
+        add(menu,BorderLayout.EAST);
+        menu.add(new JLabel(player.getName()));
+        scoreLabel=new JLabel("Score: "+player.getScore());
+        menu.add(scoreLabel);
         desktop.setLayout(new GridLayout(mHeight, mWidth));
         add(desktop, BorderLayout.CENTER);
         for (int i = 0; i < totalDiamonds; i++) {
@@ -371,7 +395,7 @@ public class CGameboard extends javax.swing.JFrame {
                 deselectDiamond(mFirstActive);
                 CleanDiamonds(toRemove);
                 checkAll();
-                drawDiamonds();
+                
             } else {
                 deselectDiamond(mFirstActive);
                 selectDiamond(clickDiamond);
@@ -443,6 +467,8 @@ public class CGameboard extends javax.swing.JFrame {
     }
 
     private void CleanDiamonds(ArrayList<CPos> positions) {
+        player.incrementScore(positions.size());
+        scoreLabel.setText("Score: "+player.getScore());
         for (CPos position : positions) {
             //adding score and so on here//
             destroyGem(position);

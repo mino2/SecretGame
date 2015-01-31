@@ -12,16 +12,17 @@ public class CPlace extends JButton {
     //private static final Border mNormalBorder = BorderFactory.createEmptyBorder();
     private static final Border mNormalBorder = BorderFactory.createLineBorder(Color.red, 1); //border around all gems
 
-    
+
 
     public CPlace(CDiamond diamond) {
+        super();
         mDiamond=diamond;
         setColor(diamond.mColor);
     }
     
     private void setColor(Color c) {
         this.setBackground(c);
-        setText(""+mDiamond.mID);
+        //setText(""+mDiamond.mID);
     }
             /**
      * change border color only to mSelectedBorder 
