@@ -31,8 +31,8 @@ public class CGameboard extends javax.swing.JFrame {
      */
     public CGameboard() {
         super.setTitle("Diamanty verze " + version);  //title setup
-        mWidth = 5;
-        mHeight = 5;
+        mWidth = 10;
+        mHeight = 10;
         initComponents();
         initGameboard();
     }
@@ -180,7 +180,7 @@ public class CGameboard extends javax.swing.JFrame {
             items.get(pos.x).get(pos.y).mDiamond=generateRandDiamond();
             //swap(items.get(pos.getX()).get(pos.getY()), tmp);
             //SetItem(pos, tmp);
-            System.out.println("falling new " + upper + " on " + pos.y + " (" + pos.x + ")");
+            System.out.println("falling new " + upper + " on " + pos.y + " (" + pos.x + ")"+items.get(pos.x).get(pos.y).mDiamond.getColor());
         } else {
             swap(pos, new CPos(pos.x,upper));//now the upper gem will be invalid
             System.out.println("falling " + upper + " on " + pos.y + " (" + pos.x + ")");
@@ -241,7 +241,7 @@ public class CGameboard extends javax.swing.JFrame {
         mAllColors = new ArrayList<>();
         mAllColors.add(Color.red);
         mAllColors.add(Color.blue);
-   //     mAllColors.add(Color.yellow);
+        mAllColors.add(Color.yellow);
    //     mAllColors.add(Color.green);
    //     mAllColors.add(Color.pink);
     }

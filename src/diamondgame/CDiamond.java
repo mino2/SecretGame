@@ -11,8 +11,12 @@ import java.awt.Color;
  *
  * @author Jirka
  */
+
+
+        
 public class CDiamond {
-    
+    private static int ID=1;
+    public int mID;
     //pak dat private
     public Color mColor; //color of gem
     public boolean mMobility; //true if can be moved, false if wall
@@ -27,6 +31,7 @@ public class CDiamond {
      * @param mobility if gem is mobile
      */
         public CDiamond(Color color, boolean mobility) {
+        mID=ID++;
         mColor=color;
         mMobility = mobility;
         //      mID = ID;

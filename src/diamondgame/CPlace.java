@@ -21,6 +21,7 @@ public class CPlace extends JButton {
     
     private void setColor(Color c) {
         this.setBackground(c);
+        setText(""+mDiamond.mID);
     }
             /**
      * change border color only to mSelectedBorder 
