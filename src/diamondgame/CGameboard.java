@@ -31,8 +31,8 @@ public class CGameboard extends javax.swing.JFrame {
      */
     public CGameboard() {
         super.setTitle("Diamanty verze " + version);  //title setup
-        mWidth = 15;
-        mHeight = 10;
+        mWidth = 5;
+        mHeight = 5;
         initComponents();
         initGameboard();
     }
@@ -247,9 +247,9 @@ public class CGameboard extends javax.swing.JFrame {
         mAllColors = new ArrayList<>();
         mAllColors.add(Color.red);
         mAllColors.add(Color.blue);
-        mAllColors.add(Color.yellow);
-        mAllColors.add(Color.green);
-        mAllColors.add(Color.pink);
+   //     mAllColors.add(Color.yellow);
+   //     mAllColors.add(Color.green);
+   //     mAllColors.add(Color.pink);
     }
 
     
@@ -352,6 +352,7 @@ public class CGameboard extends javax.swing.JFrame {
 
                 if (!success1 && !success2) {//bad move, return back
                     swap(mFirstActive,mSecondActive);
+                    deselectDiamond(mFirstActive);
                     return;
                 }
 
