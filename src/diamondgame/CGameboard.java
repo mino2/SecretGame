@@ -383,7 +383,7 @@ public class CGameboard extends javax.swing.JFrame {
 
         //find the most left place of the same color
         int left = Active.x;
-        while (left > 0 && items.get(left - 1).get(Active.y).getColor() == refColor) {
+        while (left-1 >= 0 && items.get(left - 1).get(Active.y).getColor() == refColor) {
             System.out.println("porovnavam vlevo s: " + items.get(left - 1).get(Active.y).getColor());
             left--;
         }
@@ -427,7 +427,7 @@ public class CGameboard extends javax.swing.JFrame {
         }
         if (vertMatch && horMatch) {//vertical and horizontal match
             for (int i = 0; i < neighbours.size(); i++) {
-                if (neighbours.get(i) == Active) {
+                if (neighbours.get(i).compare(Active)) {
                     neighbours.remove(i); //there would be the active element twice
                     return neighbours;
                 }
