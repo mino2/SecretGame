@@ -3,7 +3,7 @@ package diamondgame;
 import java.nio.file.Files;
 
 public class CDiamondGame {
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     /**
      * @param args the command line arguments

@@ -11,7 +11,7 @@ public class CPlayer {
 
     public CPlayer()      
     {
-        this("Pan R.",-5);
+        this("Pan R.",0);
     }
     
     public CPlayer(String mName, int score) {

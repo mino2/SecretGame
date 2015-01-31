@@ -2,8 +2,10 @@ package diamondgame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -33,11 +35,13 @@ public class CGameboard extends javax.swing.JFrame {
     private ArrayList<Color> mAllColors; //all possible collors for diamonds
     private static final String version = "0.3"; //actual version
     private CPlayer player;
+    private boolean wasStartCount;
 
     /**
      *
      */
     public CGameboard() {
+        wasStartCount=false;
         super.setTitle("Diamanty verze " + version);  //title setup
         mWidth = 10;
         mHeight = 10;
@@ -268,7 +272,7 @@ public class CGameboard extends javax.swing.JFrame {
         mAllColors.add(Color.red);
         mAllColors.add(Color.blue);
         mAllColors.add(Color.yellow);
-   //     mAllColors.add(Color.green);
+        mAllColors.add(Color.green);
    //     mAllColors.add(Color.pink);
     }
 
@@ -309,6 +313,11 @@ public class CGameboard extends javax.swing.JFrame {
         //    group.add(place);
         }
 
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        
+        
         //nastaveni layoutu
         setLayout(new BorderLayout());
         if(CDiamondGame.DEBUG){
@@ -317,7 +326,9 @@ public class CGameboard extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         setUndecorated(true);}
         setVisible(true);
+        
 
+        
         /*plocha = new JPanel();
          plocha.setLayout(new GridLayout(3, 3));
          add(plocha, BorderLayout.CENTER);
@@ -328,6 +339,9 @@ public class CGameboard extends javax.swing.JFrame {
         
         menu=new JPanel();
         desktop = new JPanel();
+        int size=(int)((width>height)?height:width);
+        desktop.setPreferredSize(new Dimension(size,size));
+        System.out.print(size);
         
         menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
         add(menu,BorderLayout.EAST);
@@ -349,6 +363,8 @@ public class CGameboard extends javax.swing.JFrame {
         desktop.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 
         checkAll();
+        if(!wasStartCount)
+            wasStartCount=true;
     }
 
     private class ActionListenerDiamond implements ActionListener {
@@ -471,8 +487,11 @@ public class CGameboard extends javax.swing.JFrame {
     }
 
     private void CleanDiamonds(ArrayList<CPos> positions) {
+        if(wasStartCount)
+        {
         player.incrementScore(positions.size());
         scoreLabel.setText("Score: "+player.getScore());
+        }
         for (CPos position : positions) {
             //adding score and so on here//
             destroyGem(position);

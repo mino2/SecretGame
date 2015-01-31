@@ -10,7 +10,7 @@ public class CPlace extends JButton {
     public CDiamond mDiamond;
     private static final Border mSelectedBorder = BorderFactory.createLineBorder(Color.green, 4); //border around selected gem
     //private static final Border mNormalBorder = BorderFactory.createEmptyBorder();
-    private static final Border mNormalBorder = BorderFactory.createLineBorder(Color.red, 1); //border around all gems
+    private static final Border mNormalBorder = BorderFactory.createLineBorder(Color.black, 1); //border around all gems
 
 
 
