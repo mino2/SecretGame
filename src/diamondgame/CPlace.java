@@ -19,16 +19,12 @@ public class CPlace extends JButton {
         setColor(diamond.mColor);
     }
     
-    public void setColor(Color c) {
+    private void setColor(Color c) {
         this.setBackground(c);
     }
             /**
-     * change border color only to mSelectedBorder
-     *
-     * @param 
-     * @return 
+     * change border color only to mSelectedBorder 
      */
-    
     public void selectMe() {
         this.setBorder(mSelectedBorder);
     }
@@ -36,9 +32,8 @@ public class CPlace extends JButton {
     
      /**
      * set gem as valid and gives it a color
-     *
-     * @param color new color of gem
-     * @return 
+     * 
+     * @param diam
      */
    public void createMe(CDiamond diam) {
        mDiamond=diam;
@@ -46,10 +41,7 @@ public class CPlace extends JButton {
     }    
 
         /**
-     * change border color only to mNormalBorder
-     *
-     * @param 
-     * @return 
+     * change border color only to mNormalBorder 
      */
     public void deselectMe() {
         this.setBorder(mNormalBorder);
@@ -57,10 +49,7 @@ public class CPlace extends JButton {
     
     
      /**
-     * set validity to 0 and color to white
-     *
-     * @param
-     * @return 
+     * set validity to 0 and color to white 
      */
     
     public void deleteMe() {
@@ -72,8 +61,6 @@ public class CPlace extends JButton {
      * returns mMobility
      *
      * true if mobile, false if wall
-     * 
-     * @param 
      * @return whether is gem mobile or not 
      */
     public boolean isMobile() {

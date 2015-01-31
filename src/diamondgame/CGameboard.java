@@ -39,7 +39,7 @@ public class CGameboard extends javax.swing.JFrame {
 
     /**
      *
-     * @return
+     * @return hodnota
      */
     public int fillBoard() {
         return 0;
@@ -129,9 +129,6 @@ public class CGameboard extends javax.swing.JFrame {
         CDiamond tmpGem=items.get(first.x).get(first.y).mDiamond;
         items.get(first.x).get(first.y).mDiamond=items.get(second.x).get(second.y).mDiamond;
         items.get(second.x).get(second.y).mDiamond=tmpGem;
-        //SetItem(first, second);
-        //SetItem(second, tmpPos);
-        return;
     }
     
 
@@ -184,11 +181,9 @@ public class CGameboard extends javax.swing.JFrame {
             //swap(items.get(pos.getX()).get(pos.getY()), tmp);
             //SetItem(pos, tmp);
             System.out.println("falling new " + upper + " on " + pos.y + " (" + pos.x + ")");
-            return;
         } else {
             swap(pos, new CPos(pos.x,upper));//now the upper gem will be invalid
             System.out.println("falling " + upper + " on " + pos.y + " (" + pos.x + ")");
-            return;
         }
     }
     
@@ -205,12 +200,11 @@ public class CGameboard extends javax.swing.JFrame {
     
     /**
      * Check the whole gameboard for invalid/destroyed gems.as result of this method, the whole gameboard should be valid
- 
- Use {@link #initGameboard()}.
-     * @param <error>
+     * 
+     * Use {@link #initGameboard()}. 
      */
     public void checkAll() { //projed vsechny odspoda, kdyz je nekde prazdno tak shod zezhora a projed nakonci znovu
-        boolean changed = false;
+        boolean changed;
         do {
             changed = false;
             for (int i = 0; i < items.size(); i++) {//from left to right
@@ -437,9 +431,9 @@ public class CGameboard extends javax.swing.JFrame {
     }
 
     private void CleanDiamonds(ArrayList<CPos> positions) {
-        for (int i = 0; i < positions.size(); i++) {
+        for (CPos position : positions) {
             //adding score and so on here//
-            destroyGem(positions.get(i));
+            destroyGem(position);
         }
     }
 
@@ -480,16 +474,11 @@ public class CGameboard extends javax.swing.JFrame {
             //  items.get(diamondID).setBorder(BorderFactory.createEmptyBorder()); //change active place to green
             items.get(pos.x).get(pos.y).deselectMe();
         }
-        return;
     }
 
     private boolean tryDiamond(CPos pos) {
         ArrayList<CPos> list = getNeighboursToDelete(pos);
-        if (list.size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return list.size() > 0;
     }
     private void drawDiamonds()
     {

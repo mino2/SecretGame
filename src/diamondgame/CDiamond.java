@@ -25,8 +25,6 @@ public class CDiamond {
      * 
      * @param color color of new gem
      * @param mobility if gem is mobile
-     * @param pos position of gem
-     * @return new gem
      */
         public CDiamond(Color color, boolean mobility) {
         mColor=color;
@@ -39,8 +37,6 @@ public class CDiamond {
      * returns mMobility
      *
      * true if mobile, false if wall
-     * 
-     * @param 
      * @return whether is gem mobile or not 
      */
     public boolean isMobile() {
