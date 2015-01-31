@@ -132,7 +132,7 @@ public class CGameboard extends javax.swing.JFrame {
 
     public void swap(CPos first, CPos second) {
         if (CDiamondGame.DEBUG) {
-            System.out.println("SWAPPING :-)");
+            printDebug("SWAPPING :-)");
         }
         CDiamond tmpGem=items.get(first.x).get(first.y).mDiamond;
         items.get(first.x).get(first.y).mDiamond=items.get(second.x).get(second.y).mDiamond;
@@ -188,10 +188,10 @@ public class CGameboard extends javax.swing.JFrame {
             items.get(pos.x).get(pos.y).mDiamond=generateRandDiamond();
             //swap(items.get(pos.getX()).get(pos.getY()), tmp);
             //SetItem(pos, tmp);
-            System.out.println("falling new " + upper + " on " + pos.y + " (" + pos.x + ")"+items.get(pos.x).get(pos.y).mDiamond.getColor());
+       printDebug("falling new " + upper + " on " + pos.y + " (" + pos.x + ")"+items.get(pos.x).get(pos.y).mDiamond.getColor());
         } else {
             swap(pos, new CPos(pos.x,upper));//now the upper gem will be invalid
-            System.out.println("falling " + upper + " on " + pos.y + " (" + pos.x + ")");
+       printDebug("falling " + upper + " on " + pos.y + " (" + pos.x + ")");
         }
     }
     
@@ -220,7 +220,7 @@ public class CGameboard extends javax.swing.JFrame {
                     if (!items.get(i).get(j).isValide()) {
                         CPos pos = new CPos(i, j);
                         fall(pos); 
-                        //System.out.println("After fall "+items.get(i).get(j).mColor);
+                        printDebug("After fall "+items.get(i).get(j).getColor());
                         changed = true;
                     }
                 }
@@ -231,7 +231,7 @@ public class CGameboard extends javax.swing.JFrame {
                     if (tryDiamond(new CPos(i,j))) {
                         CPos pos = new CPos(i, j);
                         CleanDiamonds(getNeighboursToDelete(pos));
-                        //System.out.println("After fall "+items.get(i).get(j).mColor);
+                        printDebug("After fall "+items.get(i).get(j).getColor());
                         changed = true;
                     }
                 }
@@ -311,7 +311,11 @@ public class CGameboard extends javax.swing.JFrame {
 
         //nastaveni layoutu
         setLayout(new BorderLayout());
-        setSize(600, 600);
+        if(CDiamondGame.DEBUG){
+        setSize(600, 600);}
+        else{
+        setExtendedState(MAXIMIZED_BOTH);
+        setUndecorated(true);}
         setVisible(true);
 
         /*plocha = new JPanel();
@@ -359,7 +363,7 @@ public class CGameboard extends javax.swing.JFrame {
             }
             /*bro testoval jsem to to porvonani CPOS porovanva ID to znamena ze e to stejnej objekt
             a pokud se ti muze stat ye 2 objekty budou mit stejny souradnice a jiny ID selze to*/
-            if (mFirstActive.x < 0 || mFirstActive.y < 0 || clickDiamond == mFirstActive) {
+            if (mFirstActive.x < 0 || mFirstActive.y < 0 || clickDiamond.compare(mFirstActive)) {
                 deselectDiamond(mFirstActive);
                 deselectDiamond(mSecondActive);
                 selectDiamond(clickDiamond);
@@ -407,14 +411,14 @@ public class CGameboard extends javax.swing.JFrame {
         ArrayList<CPos> neighbours = new ArrayList<>();
 
         Color refColor = items.get(Active.x).get(Active.y).getColor();
-        System.out.println("refColor je: " + refColor);
+     printDebug("refColor je: " + refColor);
         boolean horMatch = false;
         boolean vertMatch = false;
 
         //find the most left place of the same color
         int left = Active.x;
         while (left-1 >= 0 && items.get(left - 1).get(Active.y).getColor() == refColor) {
-            System.out.println("porovnavam vlevo s: " + items.get(left - 1).get(Active.y).getColor());
+      printDebug("porovnavam vlevo s: " + items.get(left - 1).get(Active.y).getColor());
             left--;
         }
         int mostLeft = left;
@@ -428,7 +432,7 @@ public class CGameboard extends javax.swing.JFrame {
         //find the lowest place of the same color
         int up = Active.y;
         while (up - 1 >= 0 && items.get(Active.x).get(up - 1).getColor() == refColor) {
-            System.out.println("porovnavam nahore s: " + items.get(Active.x).get(up - 1).getColor());
+       printDebug("porovnavam nahore s: " + items.get(Active.x).get(up - 1).getColor());
             up--;
         }
         int mostUp = up;
@@ -488,7 +492,7 @@ public class CGameboard extends javax.swing.JFrame {
     private void selectDiamond(CPos pos) {
         if (pos.x < 0 || pos.y < 0) {
             if (CDiamondGame.DEBUG) {
-                System.out.println("SELECTING bad diamond bro");
+           printDebug("SELECTING bad diamond bro");
             }
             return;
         }
@@ -528,43 +532,22 @@ public class CGameboard extends javax.swing.JFrame {
             }
         }
     }
-    private CPos findPlace(CPlace diamond)
+    private CPos findPlace(CPlace place)
     {
         for (int i = 0; i < mWidth; i++) {
             for (int j = 0; j < mHeight; j++) {
-                if(items.get(i).get(j)==diamond)
+                if(items.get(i).get(j) == place)
                     return new CPos(i, j);
             }
         }
         return null;
     }
     
+    public void printDebug(String s){
+    if(CDiamondGame.DEBUG){
+        System.out.println(s);
+    }
+    }
     
     
-  
-    /*private class FocusListenerDiamond extends FocusAdapter {
-
-     @Override
-     public void focusGained(FocusEvent e) {
-     super.focusGained(e);
-     JBSudoku button = (JBSudoku) e.getSource();
-     if (button.getNumber() == 0) {
-     button.setBackground(Color.CYAN);
-     } else {
-     if (checkSudoku(button.id)) {
-     button.setBackground(colorRight);
-     } else {
-     button.setBackground(colorWrong);
-     }
-     }       // if (!button.hasFocus()) button.requestFocus();
-     Sudoku.activeButton = button.id;
-     }
-
-     @Override
-     public void focusLost(FocusEvent e) {
-     super.focusLost(e);
-     JBSudoku button = (JBSudoku) e.getSource();
-     button.setBackground(null);
-     }
-     }*/
 }
