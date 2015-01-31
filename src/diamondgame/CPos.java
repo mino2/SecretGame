@@ -1,6 +1,5 @@
 package diamondgame;
 
-import com.sun.org.apache.xpath.internal.operations.Equals;
 
 final class CPos {
 
@@ -19,9 +18,8 @@ final class CPos {
     
     public boolean compare(CPos pos) {
     if ( this == pos ) return true; //same address
-    if(this.x == pos.x && this.y == pos.y) return true; //fix me
 
-    return false;
+    return this.x == pos.x && this.y == pos.y;
     }
     
     
