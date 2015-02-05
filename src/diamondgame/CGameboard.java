@@ -9,13 +9,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -23,39 +21,36 @@ import javax.swing.JPanel;
  */
 public class CGameboard extends javax.swing.JFrame {
 
-    private final int mWidth; //width of gameboard
-    private final int mHeight; //height of gameboard
+    public final int mWidth = 10; //width of gameboard
+    public final int mHeight = 10; //height of gameboard
     private CPos mFirstActive; //position of active place (after first choose by clicking on it)
     private CPos mSecondActive; //position of second place (only needed for swapping with mFirstActive so far)
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private JPanel menu;
     private JLabel scoreLabel;
-    private static ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
-    private int totalDiamonds; //just mWidth*mHeight for shorter notation
+    private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
+    public int totalDiamonds; //just mWidth*mHeight for shorter notation
     private ArrayList<Color> mAllColors; //all possible collors for diamonds
     private static final String version = "0.3"; //actual version
     private CPlayer player;
     private boolean wasStartCount;
 
+    public  ArrayList<ArrayList<CPlace>> getItems() {
+        return items;
+    }
+
+    
     /**
      *
      */
     public CGameboard() {
         wasStartCount=false;
         super.setTitle("Diamanty verze " + version);  //title setup
-        mWidth = 10;
-        mHeight = 10;
-        initComponents();
+
+        //initComponents();
         initGameboard();
     }
 
-    /**
-     *
-     * @return hodnota
-     */
-    public int fillBoard() {
-        return 0;
-    }
 
     /**
      * Calls "deleteMe" of given place.
@@ -249,13 +244,6 @@ public class CGameboard extends javax.swing.JFrame {
         } while (changed);
         drawDiamonds();
     }
-
-    private void initComponents() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-    }
-
          /**
      * Here you can add colors of gems
      *
@@ -274,6 +262,14 @@ public class CGameboard extends javax.swing.JFrame {
         mAllColors.add(Color.yellow);
         mAllColors.add(Color.green);
    //     mAllColors.add(Color.pink);
+    }
+    
+        /**
+     *
+     * @return hodnota
+     */
+    public int fillBoard() {
+        return 0;
     }
 
     
@@ -308,23 +304,19 @@ public class CGameboard extends javax.swing.JFrame {
             //   place.addFocusListener(new FocusListenerDiamond());
             //   place.addKeyListener(new KeyListenerDiamond());
             place.deselectMe();
-
+            place.setSize(10, 10);
+            place.setMaximumSize(new Dimension(10, 5));
             items.get(i % mWidth).add(place); //adding diamonds from left to right
         //    group.add(place);
         }
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
-        
-        
-        //nastaveni layoutu
-        setLayout(new BorderLayout());
-        if(CDiamondGame.DEBUG){
-        setSize(600, 600);}
-        else{
-        setExtendedState(MAXIMIZED_BOTH);
-        setUndecorated(true);}
+
+        if (CDiamondGame.DEBUG) {
+            setSize(600, 600);
+        } else {
+            setExtendedState(MAXIMIZED_BOTH);
+            setUndecorated(true);
+        }
         setVisible(true);
         
 
@@ -339,9 +331,8 @@ public class CGameboard extends javax.swing.JFrame {
         
         menu=new JPanel();
         desktop = new JPanel();
-        int size=(int)((width>height)?height:width);
-        desktop.setPreferredSize(new Dimension(size,size));
-        System.out.print(size);
+        
+        CGameLayout.createAndShowGUI("Diamondy", desktop,this);
         
         menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
         add(menu,BorderLayout.EAST);
@@ -350,18 +341,8 @@ public class CGameboard extends javax.swing.JFrame {
         menu.add(scoreLabel);
         desktop.setLayout(new GridLayout(mHeight, mWidth));
         add(desktop, BorderLayout.CENTER);
-        for (int i = 0; i < totalDiamonds; i++) {
-            int x = i % mWidth;
-            int y = i / mWidth;
-            desktop.add(items.get(x).get(y));
-           /* if (CDiamondGame.DEBUG) {
-                //items.get(x).get(y).draw();
-                GetItem(x, y).drawPos(new CPos(x, y));
-            }*/
-        }
-
-        desktop.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-
+        
+        
         checkAll();
         if(!wasStartCount)
             wasStartCount=true;
@@ -568,5 +549,32 @@ public class CGameboard extends javax.swing.JFrame {
     }
     }
     
+public void createLayout() {
+        // final CGameLayout layout = new CGameLayout("Diamanty", desktop);
+
+        /* Use an appropriate Look and Feel */
+        try {
+            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        /* Turn off metal's use of bold fonts */
+        UIManager.put("swing.boldMetal", Boolean.FALSE);
+        //Schedule a job for the event dispatchi thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                CGameLayout.createAndShowGUI("Diamanty", desktop,CGameboard.this);
+            }
+        });
+    }
+ 
     
 }
