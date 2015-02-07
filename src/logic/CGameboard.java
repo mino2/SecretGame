@@ -1,19 +1,11 @@
 package logic;
 
-import java.awt.BorderLayout;
+import GUI.CGameLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -44,7 +36,6 @@ public class CGameboard {
      */
     public CGameboard() {
         wasStartCount=false;
-        //initComponents();
         initGameboard();
         mGameLayout = new CGameLayout(version, this);
     }
@@ -299,8 +290,7 @@ public class CGameboard {
             place=new CPlace( generateRandDiamond());
             place.addActionListener(new ActionListenerDiamond());
             place.deselectMe();
-            place.setSize(10, 10);
-            place.setMaximumSize(new Dimension(10, 5));
+
             items.get(i % mWidth).add(place); //adding diamonds from left to right
         //    group.add(place);
         }

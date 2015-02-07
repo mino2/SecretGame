@@ -1,9 +1,12 @@
-package logic;
+package GUI;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import logic.CDiamondGame;
+import logic.CGameboard;
+import logic.CPlace;
  
 public class CGameLayout extends JFrame{
     JRadioButton RtoLbutton;
@@ -16,26 +19,25 @@ public class CGameLayout extends JFrame{
     private JPanel menu;
     private JLabel scoreLabel;
     private CGameboard mGame;
+    private int mMenuWidth;
     
     public CGameLayout(String version,CGameboard cGame) {
         super("Diamanty verze "+version);
-        //super.setTitle("Diamanty verze " + CGameboard.getVersion());  //title setup
         mGame=cGame;
-        
+        mMenuWidth=100;
         if (CDiamondGame.DEBUG) {
-            setSize(600, 600);
+            setSize(700, 700);
         } else {
             setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
         }
-        setVisible(true);
         
         menu=new JPanel();
         desktop = new JPanel();
-        
-//        CGameLayout.createAndShowGUI("Diamondy", desktop,this);
+        createAndShowGUI();
         
         menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
+        menu.setPreferredSize(new Dimension(mMenuWidth,0));
         add(menu,BorderLayout.EAST);
         menu.add(new JLabel(mGame.getPlayer().getName()));
         scoreLabel=new JLabel("Score: "+mGame.getPlayer().getScore());
@@ -44,15 +46,23 @@ public class CGameLayout extends JFrame{
         add(desktop, BorderLayout.CENTER);
         addComponentsToPane(this);
         
-        
+        for (int i = 0; i < mGame.totalDiamonds; i++) {
+
+            mGame.getItems().get(i % mGame.mWidth).get(i/mGame.mWidth)
+            .setPreferredSize(new Dimension(
+            (this.getSize().width-mMenuWidth-1)/mGame.mWidth,
+            (this.getSize().height-mMenuWidth)/mGame.mHeight));
+        }
     }
      
     public void addComponentsToPane(final Container pane) {
       //  final JPanel desktop = new JPanel();
         desktop.setLayout(experimentLayout);
         experimentLayout.setAlignment(FlowLayout.LEADING);
-        experimentLayout.setVgap(3);
-        experimentLayout.setHgap(4);
+        setResizable(false);
+        experimentLayout.minimumLayoutSize(desktop);
+        experimentLayout.setVgap(0);
+        experimentLayout.setHgap(0);
         JPanel controls = new JPanel();
         controls.setLayout(new FlowLayout());
          
@@ -108,16 +118,16 @@ public class CGameLayout extends JFrame{
      * this method should be invoked from the
      * event dispatch thread.
      */
-   /* public static void createAndShowGUI(String name, JPanel desktop,CGameboard cg) {
+    public void createAndShowGUI() {
         //Create and set up the window.
-        CGameLayout frame = new CGameLayout(name,cg);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       // CGameLayout frame = new CGameLayout(name);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
-        frame.addComponentsToPane(frame.getContentPane(), desktop);
+        this.addComponentsToPane(this.getContentPane());
         //Display the window.
        // frame.pack();
-        frame.setVisible(true);
-    }*/
+        this.setVisible(true);
+    }
      
 
 }
