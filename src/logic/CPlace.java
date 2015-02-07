@@ -1,4 +1,4 @@
-package diamondgame;
+package logic;
 
 import java.awt.Color;
 import javax.swing.BorderFactory;

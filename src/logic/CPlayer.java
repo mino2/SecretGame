@@ -1,4 +1,4 @@
-package diamondgame;
+package logic;
 
 /**
  *

@@ -1,4 +1,4 @@
-package diamondgame;
+package logic;
 
 
 public class CDiamondGame {
@@ -10,6 +10,7 @@ public class CDiamondGame {
     public static void main(String[] args) {
         
         CGameboard game = new CGameboard();
+        
     }
     
 }
