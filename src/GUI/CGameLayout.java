@@ -16,7 +16,7 @@ public class CGameLayout extends JFrame{
     /**************************************/
     private final int diamondSizeX = 50;
     private final int diamondSizeY = 50;
-    private final int sizeOfWindowLabel = 22;
+    private final int sizeOfWindowLabel = 22; // panel s nazvem okna, minimalizaci, krizkem...
     private final int mMenuWidth = 100;
     /**************************************/
     
@@ -41,7 +41,10 @@ public class CGameLayout extends JFrame{
         menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
         menu.setPreferredSize(new Dimension(mMenuWidth,0));
         add(menu,BorderLayout.EAST);
-        menu.add(new JLabel(mGame.getPlayer().getName()));
+        Font fontik = new Font("SansSerif", 1, 20); //1 = bold, 2 = italic, 3 = both
+        JLabel player = new JLabel(mGame.getPlayer().getName());
+        player.setFont(fontik);
+        menu.add(player, BoxLayout.X_AXIS);
         scoreLabel=new JLabel("Score: "+mGame.getPlayer().getScore());
         menu.add(scoreLabel);
         desktop.setLayout(new GridLayout(mGame.mHeight, mGame.mWidth));

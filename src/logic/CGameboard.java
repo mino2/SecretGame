@@ -295,7 +295,7 @@ public class CGameboard {
         //    group.add(place);
         }
 
-        player=new CPlayer();
+        player=new CPlayer("Plajer", 0);
         
         
         checkAll();
