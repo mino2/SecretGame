@@ -1,32 +1,34 @@
 package GUI;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import java.util.*;
 import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
  
 public class CGameLayout extends JFrame{
-    JRadioButton RtoLbutton;
-    JRadioButton LtoRbutton;
     FlowLayout experimentLayout = new FlowLayout();
-    final String RtoL = "Right to left";
-    final String LtoR = "Left to right";
-    JButton applyButton = new JButton("Apply component orientation");
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private JPanel menu;
     private JLabel scoreLabel;
     private CGameboard mGame;
-    private int mMenuWidth;
+    
+    /**************************************/
+    private final int diamondSizeX = 50;
+    private final int diamondSizeY = 50;
+    private final int sizeOfWindowLabel = 22;
+    private final int mMenuWidth = 100;
+    /**************************************/
+    
     
     public CGameLayout(String version,CGameboard cGame) {
         super("Diamanty verze "+version);
         mGame=cGame;
-        mMenuWidth=100;
+        
+        int gameboardX = mGame.mWidth*(diamondSizeX+1); //1 is the width of frame around diamond
+        int gameboardY = mGame.mHeight*(diamondSizeY+1);
         if (CDiamondGame.DEBUG) {
-            setSize(700, 700);
+            setSize(gameboardX + mMenuWidth, gameboardY + sizeOfWindowLabel);
         } else {
             setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
@@ -49,9 +51,7 @@ public class CGameLayout extends JFrame{
         for (int i = 0; i < mGame.totalDiamonds; i++) {
 
             mGame.getItems().get(i % mGame.mWidth).get(i/mGame.mWidth)
-            .setPreferredSize(new Dimension(
-            (this.getSize().width-mMenuWidth-1)/mGame.mWidth,
-            (this.getSize().height-mMenuWidth)/mGame.mHeight));
+            .setPreferredSize(new Dimension(diamondSizeX,diamondSizeY));
         }
     }
      
@@ -63,28 +63,7 @@ public class CGameLayout extends JFrame{
         experimentLayout.minimumLayoutSize(desktop);
         experimentLayout.setVgap(0);
         experimentLayout.setHgap(0);
-        JPanel controls = new JPanel();
-        controls.setLayout(new FlowLayout());
          
-        LtoRbutton = new JRadioButton(LtoR);
-        LtoRbutton.setActionCommand(LtoR);
-        LtoRbutton.setSelected(true);
-        RtoLbutton = new JRadioButton(RtoL);
-        RtoLbutton.setActionCommand(RtoL);
-         
-
-         
-        //Add controls to set up the component orientation in the experiment layout
-        final ButtonGroup group = new ButtonGroup();
-        group.add(LtoRbutton);
-        group.add(RtoLbutton);
-        controls.add(LtoRbutton);
-        controls.add(RtoLbutton);
-        controls.add(applyButton);
-         
- 
-        
-        
          for (int i = 0; i < mGame.totalDiamonds; i++) {
             int x = i % mGame.mWidth;
             int y = i / mGame.mWidth;
