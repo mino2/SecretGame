@@ -1,16 +1,19 @@
 package GUI;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
  
-public class CGameLayout extends JFrame{
+public class CGameLayout extends JFrame implements ActionListener{
     FlowLayout experimentLayout = new FlowLayout();
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private JPanel menu;
     private JLabel scoreLabel;
+    private Button exit;
     private CGameboard mGame;
     
     /**************************************/
@@ -47,6 +50,12 @@ public class CGameLayout extends JFrame{
         menu.add(player, BoxLayout.X_AXIS);
         scoreLabel=new JLabel("Score: "+mGame.getPlayer().getScore());
         menu.add(scoreLabel);
+        exit=new Button("Exit");
+        menu.add(exit);
+       
+        exit.addActionListener(this);
+       // setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
         desktop.setLayout(new GridLayout(mGame.mHeight, mGame.mWidth));
         add(desktop, BorderLayout.CENTER);
         addComponentsToPane(this);
@@ -103,12 +112,21 @@ public class CGameLayout extends JFrame{
     public void createAndShowGUI() {
         //Create and set up the window.
        // CGameLayout frame = new CGameLayout(name);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       // this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //Set up the content pane.
         this.addComponentsToPane(this.getContentPane());
         //Display the window.
        // frame.pack();
         this.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        if(JOptionPane.showConfirmDialog(this, "Are you sure ?","Exit",JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
+            setVisible(false);
+                    dispose();
+            }
     }
      
 
