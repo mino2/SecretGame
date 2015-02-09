@@ -16,7 +16,7 @@ public class CGameLayout extends JFrame{
     /**************************************/
     private final int diamondSizeX = 50;
     private final int diamondSizeY = 50;
-    private final int sizeOfWindowLabel = 22; // panel s nazvem okna, minimalizaci, krizkem...
+    private final int sizeOfWindowLabel = 0; // 22px panel s nazvem okna, minimalizaci, krizkem...
     private final int mMenuWidth = 100;
     /**************************************/
     
@@ -25,19 +25,19 @@ public class CGameLayout extends JFrame{
         super("Diamanty verze "+version);
         mGame=cGame;
         
-        int gameboardX = mGame.mWidth*(diamondSizeX+1); //1 is the width of frame around diamond
-        int gameboardY = mGame.mHeight*(diamondSizeY+1);
+        int gameboardX = mGame.mWidth*(diamondSizeX)  +4; //4px without default system window borders, 10 with 
+        int gameboardY = mGame.mHeight*(diamondSizeY) +4; //4px without default system window borders, 10 with 
         if (CDiamondGame.DEBUG) {
             setSize(gameboardX + mMenuWidth, gameboardY + sizeOfWindowLabel);
+            setUndecorated(true);
         } else {
             setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
         }
-        
-        menu=new JPanel();
+ 
+        menu=new ImagePanel(new ImageIcon(this.getClass().getResource("/images/menuBG.jpg")).getImage());
         desktop = new JPanel();
         createAndShowGUI();
-        
         menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
         menu.setPreferredSize(new Dimension(mMenuWidth,0));
         add(menu,BorderLayout.EAST);
@@ -68,8 +68,8 @@ public class CGameLayout extends JFrame{
         experimentLayout.setHgap(0);
          
          for (int i = 0; i < mGame.totalDiamonds; i++) {
-            int x = i % mGame.mWidth;
-            int y = i / mGame.mWidth;
+            int x = (i % mGame.mWidth);
+            int y = (i / mGame.mWidth);
             desktop.add(mGame.getItems().get(x).get(y));
              if (CDiamondGame.DEBUG) {
               CPlace place = mGame.GetItem(x, y);

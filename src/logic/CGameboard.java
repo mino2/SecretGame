@@ -3,6 +3,7 @@ package logic;
 import GUI.CGameLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import java.util.ArrayList;
  */
 public class CGameboard {
 
-    public final int mWidth = 10; //width of gameboard
-    public final int mHeight = 10; //height of gameboard
+    public final int mWidth = 17; //width of gameboard
+    public final int mHeight = 13; //height of gameboard
     private CPos mFirstActive; //position of active place (after first choose by clicking on it)
     private CPos mSecondActive; //position of second place (only needed for swapping with mFirstActive so far)
 
@@ -38,6 +39,7 @@ public class CGameboard {
         wasStartCount=false;
         initGameboard();
         mGameLayout = new CGameLayout(version, this);
+        
     }
 
 
@@ -250,7 +252,11 @@ public class CGameboard {
         mAllColors.add(Color.blue);
         mAllColors.add(Color.yellow);
         mAllColors.add(Color.green);
-   //     mAllColors.add(Color.pink);
+        mAllColors.add(Color.pink);
+        mAllColors.add(Color.magenta);
+        mAllColors.add(Color.orange);
+        mAllColors.add(Color.DARK_GRAY);
+        mAllColors.add(Color.black);
     }
     
         /**
