@@ -252,11 +252,10 @@ public class CGameboard {
         mAllColors.add(Color.blue);
         mAllColors.add(Color.yellow);
         mAllColors.add(Color.green);
-        mAllColors.add(Color.pink);
-        mAllColors.add(Color.magenta);
-        //mAllColors.add(Color.orange);
-        mAllColors.add(Color.DARK_GRAY);
-        mAllColors.add(Color.black);
+    //    mAllColors.add(Color.pink);
+    //    mAllColors.add(Color.magenta);
+     //   mAllColors.add(Color.DARK_GRAY);
+    //    mAllColors.add(Color.black);
     }
     
         /**

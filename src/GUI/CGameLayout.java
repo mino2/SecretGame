@@ -8,7 +8,7 @@ import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
  
-public class CGameLayout extends JFrame implements ActionListener{
+public class CGameLayout extends JFrame{
     FlowLayout experimentLayout = new FlowLayout();
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private JPanel menu;
@@ -19,7 +19,7 @@ public class CGameLayout extends JFrame implements ActionListener{
     /**************************************/
     private final int diamondSizeX = 50;
     private final int diamondSizeY = 50;
-    private final int sizeOfWindowLabel = 0; // 22px panel s nazvem okna, minimalizaci, krizkem...
+    private final int sizeOfWindowLabel = 22; // 22px panel s nazvem okna, minimalizaci, krizkem...
     private final int mMenuWidth = 100;
     /**************************************/
     
@@ -28,11 +28,11 @@ public class CGameLayout extends JFrame implements ActionListener{
         super("Diamanty verze "+version);
         mGame=cGame;
         
-        int gameboardX = mGame.mWidth*(diamondSizeX)  +4; //4px without default system window borders, 10 with 
-        int gameboardY = mGame.mHeight*(diamondSizeY) +4; //4px without default system window borders, 10 with 
+        int gameboardX = mGame.mWidth*(diamondSizeX)  +10; //4px without default system window borders, 10 with 
+        int gameboardY = mGame.mHeight*(diamondSizeY) +10; //4px without default system window borders, 10 with 
         if (CDiamondGame.DEBUG) {
             setSize(gameboardX + mMenuWidth, gameboardY + sizeOfWindowLabel);
-            setUndecorated(true);
+            setUndecorated(false);
         } else {
             setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
@@ -42,6 +42,8 @@ public class CGameLayout extends JFrame implements ActionListener{
         desktop = new JPanel();
         createAndShowGUI();
         menu.setLayout(new BoxLayout(menu,BoxLayout.PAGE_AXIS));
+      //   menu.setLayout(new FlowLayout());
+        
         menu.setPreferredSize(new Dimension(mMenuWidth,0));
         add(menu,BorderLayout.EAST);
         Font fontik = new Font("SansSerif", 1, 20); //1 = bold, 2 = italic, 3 = both
@@ -50,10 +52,10 @@ public class CGameLayout extends JFrame implements ActionListener{
         menu.add(player, BoxLayout.X_AXIS);
         scoreLabel=new JLabel("Score: "+mGame.getPlayer().getScore());
         menu.add(scoreLabel);
-        exit=new Button("Exit");
-        menu.add(exit);
+    //    exit=new Button("Exit");
+    //    menu.add(exit);
        
-        exit.addActionListener(this);
+    //    exit.addActionListener(this);
        // setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         desktop.setLayout(new GridLayout(mGame.mHeight, mGame.mWidth));
@@ -64,6 +66,8 @@ public class CGameLayout extends JFrame implements ActionListener{
 
             mGame.getItems().get(i % mGame.mWidth).get(i/mGame.mWidth)
             .setPreferredSize(new Dimension(diamondSizeX,diamondSizeY));
+                        mGame.getItems().get(i % mGame.mWidth).get(i/mGame.mWidth)
+            .setMinimumSize(new Dimension(diamondSizeX,diamondSizeY));
         }
     }
      
@@ -120,14 +124,14 @@ public class CGameLayout extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
-    @Override
+  /*  @Override
     public void actionPerformed(ActionEvent e) {
         
         if(JOptionPane.showConfirmDialog(this, "Are you sure ?","Exit",JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
             setVisible(false);
                     dispose();
             }
-    }
+    }*/
      
 
 }
