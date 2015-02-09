@@ -17,16 +17,9 @@ public class CPlace extends JButton {
         super();
         mDiamond = diamond;
         setColor(diamond.mColor);
-        //   setTexture(diamond.mColor);
     }
 
     private void setColor(Color c) {
-        this.setBackground(c);
-        setTexture(c);
-        //setText(""+mDiamond.mID);
-    }
-
-    private void setTexture(Color c) {
 
         if (c == Color.white) {
             this.setBackground(c);
@@ -84,7 +77,6 @@ public class CPlace extends JButton {
     public void deleteMe() {
         mDiamond.isValid = false;
         setColor(Color.WHITE);
-        // setTexture(Color.WHITE);
     }
 
     /**
@@ -108,6 +100,5 @@ public class CPlace extends JButton {
 
     public void draw() {
         setColor(mDiamond.mColor);
-        //   setTexture(mDiamond.mColor);
     }
 }

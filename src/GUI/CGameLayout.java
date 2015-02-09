@@ -8,7 +8,7 @@ import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
  
-public class CGameLayout extends JFrame{
+public class CGameLayout extends JFrame implements ActionListener{
     FlowLayout experimentLayout = new FlowLayout();
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private JPanel menu;
@@ -52,10 +52,10 @@ public class CGameLayout extends JFrame{
         menu.add(player, BoxLayout.X_AXIS);
         scoreLabel=new JLabel("Score: "+mGame.getPlayer().getScore());
         menu.add(scoreLabel);
-    //    exit=new Button("Exit");
-    //    menu.add(exit);
+        exit=new Button("Exit");
+        menu.add(exit);
        
-    //    exit.addActionListener(this);
+        exit.addActionListener(this);
        // setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         desktop.setLayout(new GridLayout(mGame.mHeight, mGame.mWidth));
@@ -124,14 +124,14 @@ public class CGameLayout extends JFrame{
         this.setVisible(true);
     }
 
-  /*  @Override
+    @Override
     public void actionPerformed(ActionEvent e) {
         
         if(JOptionPane.showConfirmDialog(this, "Are you sure ?","Exit",JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
             setVisible(false);
                     dispose();
             }
-    }*/
+    }
      
 
 }
