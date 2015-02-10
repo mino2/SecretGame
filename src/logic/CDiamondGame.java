@@ -2,7 +2,7 @@ package logic;
 
 
 public class CDiamondGame {
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     /**
      * @param args the command line arguments
