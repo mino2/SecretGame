@@ -3,13 +3,14 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
 import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
 
-public class CGameLayout extends JFrame implements ActionListener {
+public class CGameLayout extends JFrame implements ActionListener, ItemListener {
 
     private FlowLayout experimentLayout = new FlowLayout();
     private JPanel desktop; //stores all buttons/diamonds for displaying
@@ -27,6 +28,7 @@ public class CGameLayout extends JFrame implements ActionListener {
     private final int diamondSizeY = 48;
     private final int sizeOfWindowLabel = 22; // 22px panel s nazvem okna, minimalizaci, krizkem...
     private final int mMenuWidth = 100;
+    private Dimension mWindowScale;
 
     /**
      * ***********************************
@@ -44,7 +46,8 @@ public class CGameLayout extends JFrame implements ActionListener {
             gameboardX += 20; //4px without default system window borders, 10 with, 20 with resizable
             gameboardY += sizeOfWindowLabel + 21;
             setUndecorated(false);
-            setSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
+            mWindowScale = new Dimension(gameboardX + mMenuWidth, gameboardY);
+            setSize(mWindowScale);
             setResizable(true);
         } else {
             gameboardX += 4; //4px without default system window borders, 10 with
@@ -74,16 +77,18 @@ public class CGameLayout extends JFrame implements ActionListener {
         JLabel player = new JLabel(mGame.getPlayer().getName());
         player.setFont(fontik);
 
-        player.setBounds(offsetX, 0, player.getText().length()*10, fontik.getSize()+5);
+        player.setBounds(mMenuWidth/2-player.getText().length()*10/2, 0, player.getText().length()*10, fontik.getSize()+5);
         menu.add(player);
-
+        
         scoreLabel = new JLabel("Score: " + mGame.getPlayer().getScore());
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize()+5);
+        Integer i = 5;
+        i.toString().length();
         menu.add(scoreLabel);
         
-        exit = new Button("Exit");
+        exit = new Button("Exit Game");
         
-        exit.setBounds(offsetX, 400, 40, 25);
+        exit.setBounds(mMenuWidth/2-exit.getLabel().length()*7/2, 400, exit.getLabel().length()*7, 20);
         menu.add(exit);
         exit.addActionListener(this);
         
@@ -91,6 +96,7 @@ public class CGameLayout extends JFrame implements ActionListener {
         fullScreen.setBounds(offsetX, 350, 100, 25);
         fullScreen.setSelected(false);
         fullScreen.setOpaque(false);
+        fullScreen.addItemListener(this);
         menu.add(fullScreen);
         
 
@@ -148,7 +154,7 @@ public class CGameLayout extends JFrame implements ActionListener {
         createMenu();
     }
 
-    @Override
+    @Override//exit button
     public void actionPerformed(ActionEvent e) {
 
         if (JOptionPane.showConfirmDialog(this, "Are you sure ?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
@@ -157,4 +163,26 @@ public class CGameLayout extends JFrame implements ActionListener {
         }
     }
 
+    //fullscreen checkbox
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+    if (e.getStateChange() == ItemEvent.SELECTED) {
+        setExtendedState(MAXIMIZED_BOTH);
+    } else {
+        setSize(mWindowScale);
+    }
+}
+
+    public Object[] getSelectedObjects() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void addItemListener(ItemListener l) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeItemListener(ItemListener l) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

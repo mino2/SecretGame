@@ -1,9 +1,5 @@
 package logic;
 
-/**
- *
- * @author Jirka
- */
 public class CPlayer {
     
     private final String mName;
