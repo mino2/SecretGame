@@ -14,8 +14,8 @@ import java.util.ArrayList;
  */
 public class CGameboard {
 
-    public final int mWidth = 17; //width of gameboard
-    public final int mHeight = 13; //height of gameboard
+    public final int mWidth = 5; //width of gameboard
+    public final int mHeight = 10; //height of gameboard
     private CPos mFirstActive; //position of active place (after first choose by clicking on it)
     private CPos mSecondActive; //position of second place (only needed for swapping with mFirstActive so far)
 
@@ -165,7 +165,7 @@ public class CGameboard {
      * 
      * Use {@link #checkAll()}.
      *
-     * @param pos  - position of destroyed gem to be filled 
+     * @param pos position of destroyed gem to be filled 
      */
     
     public void fall(CPos pos) {

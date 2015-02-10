@@ -10,7 +10,7 @@ import logic.CPlace;
 
 public class CGameLayout extends JFrame implements ActionListener {
 
-    FlowLayout experimentLayout = new FlowLayout();
+    private FlowLayout experimentLayout = new FlowLayout();
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private JPanel menu;
     private JLabel scoreLabel;
@@ -35,22 +35,28 @@ public class CGameLayout extends JFrame implements ActionListener {
         super("Diamanty verze " + version);
         mGame = cGame;
 
-        int gameboardX = mGame.mWidth * (diamondSizeX) + 10; //4px without default system window borders, 10 with 
-        int gameboardY = mGame.mHeight * (diamondSizeY) + 10; //4px without default system window borders, 10 with 
+        int gameboardX = mGame.mWidth * (diamondSizeX); 
+        int gameboardY = mGame.mHeight * (diamondSizeY); 
         if (CDiamondGame.DEBUG) {
-            setSize(gameboardX + mMenuWidth, gameboardY + sizeOfWindowLabel);
-            setUndecorated(true);
+            gameboardX += 10; //4px without default system window borders, 10 with
+            gameboardY += sizeOfWindowLabel;
+            setUndecorated(false);
+            setPreferredSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
+            setResizable(true);
         } else {
+            gameboardX += 4; //4px without default system window borders, 10 with
+            gameboardY += 4; //4px without default system window borders, 10 with
+            setPreferredSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
             setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
+            setResizable(false);
         }
-
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createAndShowGUI();
         setVisible(true);
-        //   menu.setLayout(new FlowLayout());
-
+        revalidate();
+        repaint();
     }
 
     private void createMenu() {
@@ -81,7 +87,6 @@ public class CGameLayout extends JFrame implements ActionListener {
         //  final JPanel desktop = new JPanel();
         desktop.setLayout(experimentLayout);
         experimentLayout.setAlignment(FlowLayout.LEADING);
-        setResizable(false);
         experimentLayout.minimumLayoutSize(desktop);
         experimentLayout.setVgap(0);
         experimentLayout.setHgap(0);
@@ -102,10 +107,7 @@ public class CGameLayout extends JFrame implements ActionListener {
         desktop.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 
         //Process the Apply component orientation button press
-        add(desktop, BorderLayout.CENTER);
-     //   pane.add(controls, BorderLayout.SOUTH); ;
-
-        desktop.setLayout(new GridLayout(mGame.mHeight, mGame.mWidth));
+        //getContentPane().add(desktop, BorderLayout.CENTER);
         add(desktop, BorderLayout.CENTER);
 
         for (int i = 0; i < mGame.totalDiamonds; i++) {
@@ -126,11 +128,8 @@ public class CGameLayout extends JFrame implements ActionListener {
      * invoked from the event dispatch thread.
      */
     private void createAndShowGUI() {
-
         createDesktop();
         createMenu();
-        //Display the window.
-        // frame.pack();
     }
 
     @Override
