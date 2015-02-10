@@ -20,8 +20,8 @@ public class CGameLayout extends JFrame implements ActionListener {
     /**
      * ***********************************
      */
-    private final int diamondSizeX = 50;
-    private final int diamondSizeY = 50;
+    private final int diamondSizeX = 48;
+    private final int diamondSizeY = 48;
     private final int sizeOfWindowLabel = 22; // 22px panel s nazvem okna, minimalizaci, krizkem...
     private final int mMenuWidth = 100;
 
@@ -38,25 +38,23 @@ public class CGameLayout extends JFrame implements ActionListener {
         int gameboardX = mGame.mWidth * (diamondSizeX); 
         int gameboardY = mGame.mHeight * (diamondSizeY); 
         if (CDiamondGame.DEBUG) {
-            gameboardX += 10; //4px without default system window borders, 10 with
-            gameboardY += sizeOfWindowLabel;
+            gameboardX += 20; //4px without default system window borders, 10 with, 20 with resizable
+            gameboardY += sizeOfWindowLabel + 21;
             setUndecorated(false);
-            setPreferredSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
+            setSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
             setResizable(true);
         } else {
             gameboardX += 4; //4px without default system window borders, 10 with
             gameboardY += 4; //4px without default system window borders, 10 with
-            setPreferredSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
-            setExtendedState(MAXIMIZED_BOTH);
+            setSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
+         //   setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
             setResizable(false);
         }
-        setLayout(new BorderLayout());
+    //    setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createAndShowGUI();
         setVisible(true);
-        revalidate();
-        repaint();
     }
 
     private void createMenu() {

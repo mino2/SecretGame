@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class CGameboard {
 
-    public final int mWidth = 5; //width of gameboard
+    public final int mWidth = 10; //width of gameboard
     public final int mHeight = 10; //height of gameboard
     private CPos mFirstActive; //position of active place (after first choose by clicking on it)
     private CPos mSecondActive; //position of second place (only needed for swapping with mFirstActive so far)
