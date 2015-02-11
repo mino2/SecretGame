@@ -15,7 +15,7 @@ Clip clip = AudioSystem.getClip(arrMixerInfo[1]);
 
 // Open audio clip and load samples from the audio input stream.
 clip.open(audioIn);
-clip.loop(0);
+//clip.loop(0);
 //clip.start();
 
 //clip.drain();

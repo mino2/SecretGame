@@ -3,7 +3,6 @@ package logic;
 import GUI.CGameLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class CGameboard {
     private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
     public int totalDiamonds; //just mWidth*mHeight for shorter notation
     private ArrayList<Color> mAllColors; //all possible collors for diamonds
-    private static final String version = "0.3"; //actual version
+    private static final String version = "0.5"; //actual version
     private CPlayer player;
     private boolean wasStartCount;
     private final CGameLayout mGameLayout;
