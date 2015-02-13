@@ -1,7 +1,7 @@
 package logic;
 
 
-final class CPos {
+public final class CPos {
 
     public void setXY(int x, int y){
         this.y = y;

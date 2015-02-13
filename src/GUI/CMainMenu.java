@@ -8,14 +8,14 @@ package GUI;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import logic.CGameboard;
 import logic.CPlayer;
+import shared.CDialogs;
 
 /**
  *
@@ -31,15 +31,15 @@ public class CMainMenu extends JFrame implements ActionListener {
     private final int mMaxNameLenght = 15;
 
     public CMainMenu() {
-        super("Diamanty "+CGameboard.getVersion());
+        super("Diamanty " + CGameboard.getVersion());
         setSize(400, 400);
         menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/mainMenu_bg.jpg")).getImage());
         add(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newGame = createButtonOnMenu("New Game", 120);
         load = createButtonOnMenu("Load Game", 150);
-        exit = createButtonOnMenu("Exit Game", 180);
-        mAbout = createButtonOnMenu("About", 210);
+        mAbout = createButtonOnMenu("About", 180);
+        exit = createButtonOnMenu("Exit Game", 210);
 
         setVisible(true);
 
@@ -64,14 +64,14 @@ public class CMainMenu extends JFrame implements ActionListener {
             }
         }
         if (e.getSource() == mAbout) {
-            JOptionPane.showMessageDialog(this, "Authors:\nKvido - Ing. Kvido\nPaladin - Ing. Jiří Kožusznik\nMr. R. - Mysterious creature");
+            CDialogs.about(this);
         }
 
         if (e.getSource() == newGame) {
             setVisible(false);
             String name = "";
-            while(name.length() <= 0 || name.length() > mMaxNameLenght){
-            name = JOptionPane.showInputDialog(this, "Insert your nickname:", "Choose your hero", JOptionPane.INFORMATION_MESSAGE);
+            while (name != null && (name.length() <= 0 || name.length() > mMaxNameLenght)) {
+                name = JOptionPane.showInputDialog(this, "Insert your nickname:", "Choose your hero", JOptionPane.INFORMATION_MESSAGE);
             }
             if (name != null) {
                 CGameboard game = new CGameboard(new CPlayer(name));
@@ -82,16 +82,11 @@ public class CMainMenu extends JFrame implements ActionListener {
 
         }
         if (e.getSource() == load) {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setCurrentDirectory(new java.io.File("."));
-            chooser.setDialogTitle("Load");
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Saves", "sav");
-            chooser.setFileFilter(filter);
-            chooser.setAcceptAllFileFilterUsed(false);
-            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                CGameboard game = new CGameboard(chooser.getSelectedFile());
+            
+            File tmp=CDialogs.load();
+            if (tmp!=null) {
+                CGameboard game = new CGameboard(tmp);
                 dispose();
-                
             }
         }
 

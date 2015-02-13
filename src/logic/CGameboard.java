@@ -18,6 +18,10 @@ public class CGameboard {
     private CPos mFirstActive; //position of active place (after first choose by clicking on it)
     private CPos mSecondActive; //position of second place (only needed for swapping with mFirstActive so far)
 
+    private int mMaxLevel;
+    private int mActualLevel;
+    private int mGoal;
+
     private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
     public int totalDiamonds; //just mWidth*mHeight for shorter notation
     private ArrayList<Color> mAllColors; //all possible collors for diamonds
@@ -35,20 +39,27 @@ public class CGameboard {
      * @param player
      */
     public CGameboard(CPlayer player) {
-        mPlayer=player;
+        mPlayer = player;
         wasStartCount = false;
         initGameboard();
         mGameLayout = new CGameLayout(version, this);
-
     }
-    public CGameboard(File path)
+
+    public CGameboard(File path) {
+
+        Init();
+        load(path);
+        mGameLayout = new CGameLayout(version, this);
+    }
+    
+    private void Init()
     {
         mFirstActive = new CPos(-1, -1);
         mSecondActive = new CPos(-1, -1);
         initColors();
-        Load(path);
-        mGameLayout = new CGameLayout(version, this);
+        mMaxLevel=2;
     }
+            
 
     /**
      * Calls "deleteMe" of given place.
@@ -111,11 +122,6 @@ public class CGameboard {
      * @param pos - Coordinates of item
      * @param diamond - place this item to [pos] into "items"
      */
-    /*public void SetItem(CPos pos, CPlace diamond) {
-     if (pos.x >= 0 && pos.y >= 0) {
-     items.get(pos.x).set(pos.y, diamond);
-     }
-     }*/
     /**
      * Swaps first and second diamonds.
      *
@@ -279,14 +285,10 @@ public class CGameboard {
      * @param
      * @return
      */
-    
-    
     private void initGameboard() {
 
-        mFirstActive = new CPos(-1, -1);
-        mSecondActive = new CPos(-1, -1);
+        Init();
         totalDiamonds = mWidth * mHeight;
-        initColors();
         items = new ArrayList<>();
         CPlace place;
         // ButtonGroup group =new ButtonGroup();
@@ -304,7 +306,6 @@ public class CGameboard {
         }
 
         //player = new CPlayer("Plajer", 0);
-
         checkAll();
         if (!wasStartCount) {
             wasStartCount = true;
@@ -510,32 +511,6 @@ public class CGameboard {
         }
     }
 
-    /*public void createLayout() {
-     // final CGameLayout layout = new CGameLayout("Diamanty", desktop);
-
-     // Use an appropriate Look and Feel 
-     try {
-     //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-     UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-     } catch (UnsupportedLookAndFeelException ex) {
-     ex.printStackTrace();
-     } catch (IllegalAccessException ex) {
-     ex.printStackTrace();
-     } catch (InstantiationException ex) {
-     ex.printStackTrace();
-     } catch (ClassNotFoundException ex) {
-     ex.printStackTrace();
-     }
-     // Turn off metal's use of bold fonts //
-     UIManager.put("swing.boldMetal", Boolean.FALSE);
-     //Schedule a job for the event dispatchi thread:
-     //creating and showing this application's GUI.
-     javax.swing.SwingUtilities.invokeLater(new Runnable() {
-     public void run() {
-     CGameLayout.createAndShowGUI("Diamanty", desktop,CGameboard.this);
-     }
-     });
-     }*/
     public static String getVersion() {
         return version;
     }
@@ -544,7 +519,7 @@ public class CGameboard {
         return mPlayer;
     }
 
-    public void Save(File path) {
+    public void save(File path) {
         try {
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path + ".sav"));
             os.writeInt(mWidth);
@@ -556,23 +531,54 @@ public class CGameboard {
         }
     }
 
-    public void Load(File path) {
+    public void load(File path) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
-            mWidth=in.readInt();
-            mHeight=in.readInt();
+            mWidth = in.readInt();
+            mHeight = in.readInt();
             items = ((ArrayList<ArrayList<CPlace>>) in.readObject());
-        for (int i = 0; i < mWidth; i++) {
-            for (int j = 0; j < mHeight; j++) {
-               items.get(i).get(j).addActionListener((new ActionListenerDiamond()));
+            for (int i = 0; i < mWidth; i++) {
+                for (int j = 0; j < mHeight; j++) {
+                    items.get(i).get(j).addActionListener((new ActionListenerDiamond()));
+                }
             }
-        }
             mPlayer = ((CPlayer) in.readObject());
-            totalDiamonds=mHeight*mWidth;
-            wasStartCount=true;
+            totalDiamonds = mHeight * mWidth;
+            wasStartCount = true;
         } catch (Exception ex) {
             System.err.println(ex);
         }
+    }
+
+    public void loadLevel(int level) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.getClass().getResource("/levels/level" + level + ".lvl").getFile()));
+            mWidth = in.readInt();
+            mHeight = in.readInt();
+            items = ((ArrayList<ArrayList<CPlace>>) in.readObject());
+            for (int i = 0; i < mWidth; i++) {
+                for (int j = 0; j < mHeight; j++) {
+                    items.get(i).get(j).addActionListener((new ActionListenerDiamond()));
+                }
+            }
+            totalDiamonds = mHeight * mWidth;
+            wasStartCount = true;
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+    }
+
+    private void winLevel() {
+
+        if (mGoal <= mPlayer.getScore()) {
+            
+            if(mActualLevel>=mMaxLevel)
+            {
+                mGameLayout.win();
+            }
+            loadLevel(++mActualLevel);
+        }
+
     }
 
 }

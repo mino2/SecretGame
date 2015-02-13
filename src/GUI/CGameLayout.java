@@ -5,11 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
+import shared.CDialogs;
 import sounds.CAudioPlayer;
 
 public class CGameLayout extends JFrame implements ActionListener, ItemListener {
@@ -93,15 +95,14 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         menu.add(scoreLabel);
 
         fullScreen = createCheckBoxOnMenu("Full Screen", offsetX, mWindowScale.height - 230, 100, 25);
-        
+
         music = createCheckBoxOnMenu("Music", offsetX, mWindowScale.height - 250, 100, 25);
         music.setSelected(false);
-        
 
         save = createButtonOnMenu("Save Game", mWindowScale.height - 140);
         load = createButtonOnMenu("Load Game", mWindowScale.height - 120);
-        exit = createButtonOnMenu("Exit Game", mWindowScale.height - 100);
-        mAbout = createButtonOnMenu("About", mWindowScale.height - 80);
+        mAbout = createButtonOnMenu("About", mWindowScale.height - 100);
+        exit = createButtonOnMenu("Exit Game", mWindowScale.height - 80);
 
     }
 
@@ -180,22 +181,17 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         if (e.getSource() == exit) {
             if (JOptionPane.showConfirmDialog(this, "Are you sure ?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                 setVisible(false);
+                CAudioPlayer.stop();
                 dispose();
             }
         }
         if (e.getSource() == mAbout) {
-            JOptionPane.showMessageDialog(this, "Authors:\nKvido - Ing. Kvido\nPaladin - Ing. Jiří Kožusznik\nMr. R. - Mysterious creature");
+            CDialogs.about(this);
         }
         if (e.getSource() == save) {
-
-            JFileChooser chooser = new JFileChooser();
-            chooser.setCurrentDirectory(new java.io.File("."));
-            chooser.setDialogTitle("Save");
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Saves", "sav");
-            chooser.setFileFilter(filter);
-            chooser.setAcceptAllFileFilterUsed(false);
-            if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                mGame.Save(chooser.getSelectedFile());
+            File tmp=CDialogs.save();
+            if (tmp!=null) {
+                mGame.save(tmp);
             }
         }
         if (e.getSource() == load) {
@@ -204,15 +200,10 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     }
 
     public void loadGame() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
-        chooser.setDialogTitle("Load");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Saves", "sav");
-        chooser.setFileFilter(filter);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        File tmp = CDialogs.load();
+        if (tmp != null) {
             desktop.removeAll();
-            mGame.Load(chooser.getSelectedFile());
+            mGame.load(tmp);
             for (int i = 0; i < mGame.totalDiamonds; i++) {
                 int x = (i % mGame.mWidth);
                 int y = (i / mGame.mWidth);
@@ -223,7 +214,12 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
             player.setText(mGame.getPlayer().getName());
             updateScore();
         }
-        
+
+    }
+    public void win()
+    {
+         JOptionPane.showMessageDialog(this, "Congratulations");
+
     }
 
     @Override
@@ -237,11 +233,9 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         }
         if (e.getSource() == music) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                //music on
                 CAudioPlayer.play();
             } else {
                 CAudioPlayer.stop();
-                //music off
             }
         }
     }
