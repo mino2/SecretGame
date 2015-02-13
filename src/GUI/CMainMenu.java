@@ -32,7 +32,7 @@ public class CMainMenu extends JFrame implements ActionListener {
     public CMainMenu() {
         super("Diamanty");
         setSize(400, 400);
-        menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/menuBG.jpg")).getImage());
+        menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/menu_bg.jpg")).getImage());
         add(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newGame = createButtonOnMenu("New Game", 20);
