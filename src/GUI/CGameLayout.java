@@ -34,7 +34,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     private final int diamondSizeX = 48;
     private final int diamondSizeY = 48;
     private final int sizeOfWindowLabel = 22; // 22px panel s nazvem okna, minimalizaci, krizkem...
-    private final int mMenuWidth = 100;
+    private final int mMenuWidth = 200;
     private Dimension mWindowScale;
 
     /**
@@ -50,7 +50,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         int gameboardY = mGame.mHeight * (diamondSizeY);
         if (CDiamondGame.DEBUG) {
             gameboardX += 20; //4px without default system window borders, 10 with, 20 with resizable
-            gameboardY += sizeOfWindowLabel + 21;
+            gameboardY += sizeOfWindowLabel + 20;
             setUndecorated(false);
             mWindowScale = new Dimension(gameboardX + mMenuWidth, gameboardY);
             setSize(mWindowScale);
@@ -70,11 +70,11 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     }
 
     private void createMenu() {
-        menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/menuBG.jpg")).getImage());
+        menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/ingameMenu_bg.jpg")).getImage());
         menu.setLayout(null);
 
         int offsetX = 5;
-        //menu.setPreferredSize(new Dimension(mMenuWidth, 0));
+        menu.setPreferredSize(new Dimension(mMenuWidth, 0));
 
         add(menu, BorderLayout.EAST);//bacha tady se to dava do JFRAMU
 
@@ -82,18 +82,21 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
 
         player = new JLabel(mGame.getPlayer().getName());
         player.setFont(fontik);
-
-        player.setBounds(mMenuWidth / 2 - player.getText().length() * 10 / 2, 0, player.getText().length() * 10, fontik.getSize() + 5);
+        player.setForeground(Color.white);
+        player.setBounds(mMenuWidth / 2 - player.getText().length() * 10 / 2, 0, player.getText().length() * 15, fontik.getSize() + 5);
         menu.add(player);
 
         scoreLabel = new JLabel("Score: " + mGame.getPlayer().getScore());
+        scoreLabel.setForeground(Color.white);
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
 
         menu.add(scoreLabel);
 
         fullScreen = createCheckBoxOnMenu("Full Screen", offsetX, mWindowScale.height - 230, 100, 25);
+        
         music = createCheckBoxOnMenu("Music", offsetX, mWindowScale.height - 250, 100, 25);
-        music.setSelected(true);
+        music.setSelected(false);
+        
 
         save = createButtonOnMenu("Save Game", mWindowScale.height - 140);
         load = createButtonOnMenu("Load Game", mWindowScale.height - 120);
@@ -117,6 +120,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         chbox.setSelected(false);
         chbox.setOpaque(false);
         chbox.addItemListener(this);
+        chbox.setForeground(Color.white);
         menu.add(chbox);
         return chbox;
     }

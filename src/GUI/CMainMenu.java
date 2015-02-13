@@ -28,17 +28,18 @@ public class CMainMenu extends JFrame implements ActionListener {
     private final JButton mAbout;
     private final JButton newGame;
     private final JButton load;
+    private final int mMaxNameLenght = 15;
 
     public CMainMenu() {
         super("Diamanty "+CGameboard.getVersion());
         setSize(400, 400);
-        menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/menu_bg.jpg")).getImage());
+        menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/mainMenu_bg.jpg")).getImage());
         add(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newGame = createButtonOnMenu("New Game", 20);
-        load = createButtonOnMenu("Load Game", 50);
-        exit = createButtonOnMenu("Exit Game", 80);
-        mAbout = createButtonOnMenu("About", 110);
+        newGame = createButtonOnMenu("New Game", 120);
+        load = createButtonOnMenu("Load Game", 150);
+        exit = createButtonOnMenu("Exit Game", 180);
+        mAbout = createButtonOnMenu("About", 210);
 
         setVisible(true);
 
@@ -46,7 +47,7 @@ public class CMainMenu extends JFrame implements ActionListener {
 
     private JButton createButtonOnMenu(String Name, int y) {
         JButton button = new JButton(Name);
-        button.setBounds(getSize().width / 2 - button.getText().length() * 8 / 2, y, button.getText().length() * 8, 18);
+        button.setBounds(getSize().width / 2 - button.getText().length() * 8 / 2, y, button.getText().length() * 9, 18);
         button.setMargin(new Insets(0, 0, 0, 0));
         menu.add(button);
         button.addActionListener(this);
@@ -68,8 +69,10 @@ public class CMainMenu extends JFrame implements ActionListener {
 
         if (e.getSource() == newGame) {
             setVisible(false);
-
-            String name = JOptionPane.showInputDialog(this, "Insert your nickname:", "Choose your hero", JOptionPane.INFORMATION_MESSAGE);
+            String name = "";
+            while(name.length() <= 0 || name.length() > mMaxNameLenght){
+            name = JOptionPane.showInputDialog(this, "Insert your nickname:", "Choose your hero", JOptionPane.INFORMATION_MESSAGE);
+            }
             if (name != null) {
                 CGameboard game = new CGameboard(new CPlayer(name));
                 dispose();
