@@ -30,7 +30,7 @@ public class CMainMenu extends JFrame implements ActionListener {
     private final JButton load;
 
     public CMainMenu() {
-        super("Diamanty");
+        super("Diamanty "+CGameboard.getVersion());
         setSize(400, 400);
         menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/menu_bg.jpg")).getImage());
         add(menu);

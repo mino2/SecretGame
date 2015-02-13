@@ -21,7 +21,7 @@ public class CGameboard {
     private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
     public int totalDiamonds; //just mWidth*mHeight for shorter notation
     private ArrayList<Color> mAllColors; //all possible collors for diamonds
-    private static final String version = "0.5"; //actual version
+    private static final String version = "0.6"; //actual version
     private CPlayer mPlayer;
     private boolean wasStartCount;
     private final CGameLayout mGameLayout;
