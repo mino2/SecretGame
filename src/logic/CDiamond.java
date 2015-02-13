@@ -1,8 +1,9 @@
 package logic;
 
 import java.awt.Color;
+import java.io.Serializable;
         
-public class CDiamond {
+public class CDiamond implements Serializable{
     private static int ID=1;
     public int mID;
     //pak dat private

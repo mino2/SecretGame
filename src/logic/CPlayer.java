@@ -1,18 +1,20 @@
 package logic;
 
-public class CPlayer {
+import java.io.Serializable;
+
+public class CPlayer implements Serializable{
     
     private final String mName;
     private int mScore;
 
     public CPlayer()      
     {
-        this("Pan R.",0);
+        this("Pan R.");
     }
     
-    public CPlayer(String mName, int score) {
+    public CPlayer(String mName) {
         this.mName = mName;
-        this.mScore = score;
+        this.mScore = 0;
     }
     public void incrementScore(int score){
         mScore+=score;

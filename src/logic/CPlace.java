@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
-public class CPlace extends JButton {
+public class CPlace extends JButton{
 
     public CDiamond mDiamond;
     private static final Border mSelectedBorder = BorderFactory.createLineBorder(Color.green, 4); //border around selected gem
@@ -21,7 +21,7 @@ public class CPlace extends JButton {
 
     private void setColor(Color c) {
 
-        if (c == Color.white) {
+        if (c.equals(Color.white)) {
             this.setBackground(c);
             this.setIcon(null);
             this.setOpaque(true);
@@ -32,16 +32,16 @@ public class CPlace extends JButton {
         this.setOpaque(false);
         this.setContentAreaFilled(false);
         //  this.setBorderPainted(false);
-        if (c == Color.yellow) {
+        if (c.equals(Color.yellow)) {
             this.setIcon(new ImageIcon(this.getClass().getResource("/images/diamond_yellow.png")));
         }
-        if (c == Color.blue) {
+        if (c.equals(Color.blue)) {
             this.setIcon(new ImageIcon(this.getClass().getResource("/images/diamond_blue.png")));
         }
-        if (c == Color.green) {
+        if (c.equals(Color.green)) {
             this.setIcon(new ImageIcon(this.getClass().getResource("/images/diamond_green.png")));
         }
-        if (c == Color.red) {
+        if (c.equals(Color.red)) {
             this.setIcon(new ImageIcon(this.getClass().getResource("/images/diamond_red.png")));
         }
         //setText(""+mDiamond.mID);

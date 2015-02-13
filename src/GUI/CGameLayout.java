@@ -6,9 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
+import sounds.CAudioPlayer;
 
 public class CGameLayout extends JFrame implements ActionListener, ItemListener {
 
@@ -17,10 +19,12 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     private CGameboard mGame;
 
     private JPanel menu;
+    private JLabel player;
     private JLabel scoreLabel;
     private JButton exit;
     private JButton mAbout;
     private JButton save;
+    private JButton load;
     private JCheckBox fullScreen;
     private JCheckBox music;
 
@@ -76,7 +80,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
 
         Font fontik = new Font("SansSerif", 1, 20); //1 = bold, 2 = italic, 3 = both
 
-        JLabel player = new JLabel(mGame.getPlayer().getName());
+        player = new JLabel(mGame.getPlayer().getName());
         player.setFont(fontik);
 
         player.setBounds(mMenuWidth / 2 - player.getText().length() * 10 / 2, 0, player.getText().length() * 10, fontik.getSize() + 5);
@@ -84,58 +88,31 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
 
         scoreLabel = new JLabel("Score: " + mGame.getPlayer().getScore());
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
-    /*    Integer i = 5;
-        i.toString().length();*/
+
         menu.add(scoreLabel);
 
-      /*  fullScreen = new JCheckBox("Full Screen");
-        fullScreen.setBounds(offsetX, 330, 100, 25);
-        fullScreen.setSelected(false);
-        fullScreen.setOpaque(false);
-        fullScreen.addItemListener(this);
-        menu.add(fullScreen);*/
-
-        fullScreen=createCheckBoxOnMenu("Full Screen", offsetX, 330, 100, 25);
-        music= createCheckBoxOnMenu("Music", offsetX, 310, 100, 25);
+        fullScreen = createCheckBoxOnMenu("Full Screen", offsetX, mWindowScale.height - 230, 100, 25);
+        music = createCheckBoxOnMenu("Music", offsetX, mWindowScale.height - 250, 100, 25);
         music.setSelected(true);
-        
-       /* music = new JCheckBox("Music");
-        music.setBounds(offsetX, 300, 100, 25);
-        music.setSelected(true);
-        music.setOpaque(false);
-        music.addItemListener(this);
-        menu.add(music);*/
 
-        
-        
-        
-       /* mAbout = new JButton("About");
-        mAbout.setFont(fontButton);
-        mAbout.setBounds(mMenuWidth / 2 - mAbout.getText().length() * 12/ 2, 370, mAbout.getText().length() * 12, fontButton.getSize()+6);
-        menu.add(mAbout);
-        mAbout.addActionListener(this);*/
-
-        mAbout=createButtonOnMenu("About", 380);
-        save=createButtonOnMenu("Save Game", 400);
-        exit=createButtonOnMenu("Exit Game", 420);
-        
-        /*exit = new JButton("Exit Game");
-        exit.setFont(fontButton);
-        exit.setBounds(mMenuWidth / 2 - exit.getText().length() * 7 / 2, 400, exit.getText().length() * 7, fontButton.getSize()+6);
-        menu.add(exit);
-        exit.addActionListener(this);*/
+        save = createButtonOnMenu("Save Game", mWindowScale.height - 140);
+        load = createButtonOnMenu("Load Game", mWindowScale.height - 120);
+        exit = createButtonOnMenu("Exit Game", mWindowScale.height - 100);
+        mAbout = createButtonOnMenu("About", mWindowScale.height - 80);
 
     }
-    private JButton createButtonOnMenu(String Name,int y){
-        JButton button=new JButton(Name);
-        button.setBounds(mMenuWidth / 2 - button.getText().length() * 8/ 2, y, button.getText().length() * 8, 18);
-        button.setMargin(new Insets(0,0,0,0));
+
+    private JButton createButtonOnMenu(String Name, int y) {
+        JButton button = new JButton(Name);
+        button.setBounds(mMenuWidth / 2 - button.getText().length() * 8 / 2, y, button.getText().length() * 8, 18);
+        button.setMargin(new Insets(0, 0, 0, 0));
         menu.add(button);
         button.addActionListener(this);
         return button;
     }
-    private JCheckBox createCheckBoxOnMenu(String Name,int x,int y,int width,int height){
-        JCheckBox chbox=new JCheckBox(Name);
+
+    private JCheckBox createCheckBoxOnMenu(String Name, int x, int y, int width, int height) {
+        JCheckBox chbox = new JCheckBox(Name);
         chbox.setBounds(x, y, width, height);
         chbox.setSelected(false);
         chbox.setOpaque(false);
@@ -143,7 +120,6 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         menu.add(chbox);
         return chbox;
     }
-    
 
     private void createDesktop() {
 
@@ -170,8 +146,6 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
 
         desktop.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 
-        //Process the Apply component orientation button press
-        //getContentPane().add(desktop, BorderLayout.CENTER);
         add(desktop, BorderLayout.CENTER);
 
         for (int i = 0; i < mGame.totalDiamonds; i++) {
@@ -206,20 +180,48 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
             }
         }
         if (e.getSource() == mAbout) {
-            JOptionPane.showMessageDialog(this, "Autors game:\nKvido - Ing. Jan Valášek\nPaladin - Ing. Jiří Kožusznik\nMr. R. - some random guy");
+            JOptionPane.showMessageDialog(this, "Authors:\nKvido - Ing. Kvido\nPaladin - Ing. Jiří Kožusznik\nMr. R. - Mysterious creature");
         }
-        if(e.getSource()==save){
+        if (e.getSource() == save) {
 
-            JFileChooser chooser=new JFileChooser();
-                chooser.setCurrentDirectory(new java.io.File("."));
-                chooser.setDialogTitle("Save");
-                if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                     System.out.println(chooser.getSelectedFile()+".sav");
-                }
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new java.io.File("."));
+            chooser.setDialogTitle("Save");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Saves", "sav");
+            chooser.setFileFilter(filter);
+            chooser.setAcceptAllFileFilterUsed(false);
+            if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                mGame.Save(chooser.getSelectedFile());
+            }
+        }
+        if (e.getSource() == load) {
+            loadGame();
         }
     }
 
-    //fullscreen checkbox
+    public void loadGame() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Load");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Saves", "sav");
+        chooser.setFileFilter(filter);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            desktop.removeAll();
+            mGame.Load(chooser.getSelectedFile());
+            for (int i = 0; i < mGame.totalDiamonds; i++) {
+                int x = (i % mGame.mWidth);
+                int y = (i / mGame.mWidth);
+                desktop.add(mGame.getItems().get(x).get(y));
+            }
+            desktop.revalidate();
+            desktop.repaint();
+            player.setText(mGame.getPlayer().getName());
+            updateScore();
+        }
+        
+    }
+
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == fullScreen) {
@@ -231,8 +233,10 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         }
         if (e.getSource() == music) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-               //music on
+                //music on
+                CAudioPlayer.play();
             } else {
+                CAudioPlayer.stop();
                 //music off
             }
         }
