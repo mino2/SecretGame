@@ -41,6 +41,8 @@ public class CGameboard {
     public CGameboard(CPlayer player) {
         mPlayer = player;
         wasStartCount = false;
+        mActualLevel=1;
+        mGoal=500;
         initGameboard();
         mGameLayout = new CGameLayout(version, this);
     }
@@ -48,7 +50,7 @@ public class CGameboard {
     public CGameboard(File path) {
 
         Init();
-        load(path);
+        loadGame(path);
         mGameLayout = new CGameLayout(version, this);
     }
     
@@ -525,13 +527,15 @@ public class CGameboard {
             os.writeInt(mWidth);
             os.writeInt(mHeight);
             os.writeObject(items);
+            os.writeInt(mActualLevel);
+            os.writeInt(mGoal);
             os.writeObject(mPlayer);
         } catch (Exception ex) {
             System.err.println(ex);
         }
     }
 
-    public void load(File path) {
+    public void loadGame(File path) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
             mWidth = in.readInt();
@@ -542,6 +546,8 @@ public class CGameboard {
                     items.get(i).get(j).addActionListener((new ActionListenerDiamond()));
                 }
             }
+            mActualLevel =in.readInt();
+            mGoal = in.readInt();
             mPlayer = ((CPlayer) in.readObject());
             totalDiamonds = mHeight * mWidth;
             wasStartCount = true;
@@ -576,7 +582,7 @@ public class CGameboard {
             {
                 mGameLayout.win();
             }
-            loadLevel(++mActualLevel);
+            loadLevel(mActualLevel++);
         }
 
     }

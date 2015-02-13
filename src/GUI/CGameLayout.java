@@ -203,7 +203,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         File tmp = CDialogs.load();
         if (tmp != null) {
             desktop.removeAll();
-            mGame.load(tmp);
+            mGame.loadGame(tmp);
             for (int i = 0; i < mGame.totalDiamonds; i++) {
                 int x = (i % mGame.mWidth);
                 int y = (i / mGame.mWidth);
