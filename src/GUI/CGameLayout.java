@@ -7,7 +7,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
@@ -45,7 +44,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
      * @param cGame
      */
     public CGameLayout(String version, CGameboard cGame) {
-        super("Diamanty verze " + version);
+        super(CDialogs.getString("title") + version);
         mGame = cGame;
 
         int gameboardX = mGame.mWidth * (diamondSizeX);
@@ -88,21 +87,21 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         player.setBounds(mMenuWidth / 2 - player.getText().length() * 10 / 2, 0, player.getText().length() * 15, fontik.getSize() + 5);
         menu.add(player);
 
-        scoreLabel = new JLabel("Score: " + mGame.getPlayer().getScore());
+        scoreLabel = new JLabel(CDialogs.getString("score") + mGame.getPlayer().getScore());
         scoreLabel.setForeground(Color.white);
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
 
         menu.add(scoreLabel);
 
-        fullScreen = createCheckBoxOnMenu("Full Screen", offsetX, mWindowScale.height - 230, 100, 25);
+        fullScreen = createCheckBoxOnMenu(CDialogs.getString("fullScreen"), offsetX, mWindowScale.height - 230, 100, 25);
 
-        music = createCheckBoxOnMenu("Music", offsetX, mWindowScale.height - 250, 100, 25);
+        music = createCheckBoxOnMenu(CDialogs.getString("music"), offsetX, mWindowScale.height - 250, 100, 25);
         music.setSelected(false);
 
-        save = createButtonOnMenu("Save Game", mWindowScale.height - 140);
-        load = createButtonOnMenu("Load Game", mWindowScale.height - 120);
-        mAbout = createButtonOnMenu("About", mWindowScale.height - 100);
-        exit = createButtonOnMenu("Exit Game", mWindowScale.height - 80);
+        save = createButtonOnMenu(CDialogs.getString("saveGame"), mWindowScale.height - 140);
+        load = createButtonOnMenu(CDialogs.getString("loadGame"), mWindowScale.height - 120);
+        mAbout = createButtonOnMenu(CDialogs.getString("about"), mWindowScale.height - 100);
+        exit = createButtonOnMenu(CDialogs.getString("exitGame"), mWindowScale.height - 80);
 
     }
 
@@ -163,7 +162,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     }
 
     public void updateScore() {
-        scoreLabel.setText("Score: " + mGame.getPlayer().getScore());
+        scoreLabel.setText(CDialogs.getString("score") + mGame.getPlayer().getScore());
     }
 
     /**
@@ -179,14 +178,10 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == exit) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure ?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                setVisible(false);
-                CAudioPlayer.stop();
-                dispose();
-            }
+            CDialogs.exit(this);
         }
         if (e.getSource() == mAbout) {
-            CDialogs.about(this);
+            CDialogs.about();
         }
         if (e.getSource() == save) {
             File tmp=CDialogs.save();

@@ -12,7 +12,6 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import logic.CGameboard;
 import logic.CPlayer;
 import shared.CDialogs;
@@ -28,18 +27,21 @@ public class CMainMenu extends JFrame implements ActionListener {
     private final JButton mAbout;
     private final JButton newGame;
     private final JButton load;
+    private final JButton languages;
     private final int mMaxNameLenght = 15;
 
     public CMainMenu() {
-        super("Diamanty " + CGameboard.getVersion());
+        super(CDialogs.getString("title") + CGameboard.getVersion());
+
         setSize(400, 400);
         menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/mainMenu_bg.jpg")).getImage());
         add(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newGame = createButtonOnMenu("New Game", 120);
-        load = createButtonOnMenu("Load Game", 150);
-        mAbout = createButtonOnMenu("About", 180);
-        exit = createButtonOnMenu("Exit Game", 210);
+        newGame = createButtonOnMenu(CDialogs.getString("newGame"), 90);
+        load = createButtonOnMenu(CDialogs.getString("loadGame"), 120);
+        languages = createButtonOnMenu(CDialogs.getString("lang"), 150);
+        mAbout = createButtonOnMenu(CDialogs.getString("about"), 180);
+        exit = createButtonOnMenu(CDialogs.getString("exitGame"), 210);
 
         setVisible(true);
 
@@ -54,24 +56,21 @@ public class CMainMenu extends JFrame implements ActionListener {
         return button;
     }
 
-    @Override//exit button
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == exit) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure ?", "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                setVisible(false);
-                dispose();
-            }
+            CDialogs.exit(this);
         }
         if (e.getSource() == mAbout) {
-            CDialogs.about(this);
+            CDialogs.about();
         }
 
         if (e.getSource() == newGame) {
             setVisible(false);
             String name = "";
             while (name != null && (name.length() <= 0 || name.length() > mMaxNameLenght)) {
-                name = JOptionPane.showInputDialog(this, "Insert your nickname:", "Choose your hero", JOptionPane.INFORMATION_MESSAGE);
+                name = CDialogs.name();
             }
             if (name != null) {
                 CGameboard game = new CGameboard(new CPlayer(name));
@@ -82,13 +81,27 @@ public class CMainMenu extends JFrame implements ActionListener {
 
         }
         if (e.getSource() == load) {
-            
-            File tmp=CDialogs.load();
-            if (tmp!=null) {
+
+            File tmp = CDialogs.load();
+            if (tmp != null) {
                 CGameboard game = new CGameboard(tmp);
                 dispose();
             }
         }
+        if (e.getSource() == languages) {
+            CDialogs.changeLang();
+            updateLang();
+        }
+
+    }
+
+    public void updateLang() {
+        newGame.setText(CDialogs.getString("newGame"));
+        load.setText(CDialogs.getString("loadGame"));
+        languages.setText(CDialogs.getString("lang"));
+        mAbout.setText(CDialogs.getString("about"));
+        exit.setText(CDialogs.getString("exitGame"));
+        setTitle(CDialogs.getString("title") + CGameboard.getVersion());
 
     }
 
