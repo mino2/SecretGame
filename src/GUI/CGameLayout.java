@@ -85,23 +85,31 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         player.setFont(fontik);
         player.setForeground(Color.white);
         player.setBounds(mMenuWidth / 2 - player.getText().length() * 10 / 2, 0, player.getText().length() * 15, fontik.getSize() + 5);
+        fitCompToFont(player, menu);
         menu.add(player);
 
         scoreLabel = new JLabel(CDialogs.getString("score") + mGame.getPlayer().getScore());
         scoreLabel.setForeground(Color.white);
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
-
+        fitCompToFont(scoreLabel);
+        
         menu.add(scoreLabel);
 
         fullScreen = createCheckBoxOnMenu(CDialogs.getString("fullScreen"), offsetX, mWindowScale.height - 230, 100, 25);
-
+        fitCompToFont(fullScreen);
+        
         music = createCheckBoxOnMenu(CDialogs.getString("music"), offsetX, mWindowScale.height - 250, 100, 25);
         music.setSelected(false);
-
+        fitCompToFont(music);
+        
         save = createButtonOnMenu(CDialogs.getString("saveGame"), mWindowScale.height - 140);
+        fitCompToFont(save, menu);
         load = createButtonOnMenu(CDialogs.getString("loadGame"), mWindowScale.height - 120);
+        fitCompToFont(load, menu);
         mAbout = createButtonOnMenu(CDialogs.getString("about"), mWindowScale.height - 100);
+        fitCompToFont(mAbout, menu);
         exit = createButtonOnMenu(CDialogs.getString("exitGame"), mWindowScale.height - 80);
+        fitCompToFont(exit, menu);
 
     }
 
@@ -184,8 +192,8 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
             CDialogs.about();
         }
         if (e.getSource() == save) {
-            File tmp=CDialogs.save();
-            if (tmp!=null) {
+            File tmp = CDialogs.save();
+            if (tmp != null) {
                 mGame.save(tmp);
             }
         }
@@ -211,10 +219,49 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         }
 
     }
-    public void win()
-    {
-         JOptionPane.showMessageDialog(this, "Congratulations");
 
+    public void win() {
+        JOptionPane.showMessageDialog(this, "Congratulations");
+
+    }
+
+    public static void fitCompToFont(JLabel cpt) { //resize to fit text
+        cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length(), cpt.getFont().getSize() + 5));
+    }
+
+    public static void fitCompToFont(JCheckBox cpt) { //resize to fit text
+        cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length() + 20, cpt.getFont().getSize() + 5));
+    }
+    
+    public static void fitCompToFont(JButton cpt) { //resize to fit text
+        cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length(), cpt.getFont().getSize() + 5));
+    }
+
+    public static void fitCompToFont(JLabel cpt, JPanel panel) { //resize to fit text and center to panel
+        int width = cpt.getFont().getSize() * cpt.getText().length()/2; 
+        int height = cpt.getFont().getSize() + 5;
+        int x = panel.getWidth() / 2 - width / 2;
+        int y = cpt.getBounds().y;
+        cpt.setBounds(x, y, panel.getWidth(), height);
+        cpt.setBorder(null);
+    }
+    
+    public static void fitCompToFont(JCheckBox cpt, JPanel panel) { //resize to fit text and center to panel
+        int width = cpt.getFont().getSize() * cpt.getText().length() * 3 / 4;
+        int height = cpt.getFont().getSize() + 5;
+        int x = panel.getWidth() / 2 - width / 2;
+        int y = cpt.getBounds().y;
+        cpt.setBounds(x, y, width, height);
+        cpt.setBorder(null);
+    }
+
+    public static void fitCompToFont(JButton cpt, JPanel panel) { //resize to fit text and center to panel
+        int width = cpt.getFont().getSize() * cpt.getText().length() * 3 / 4;
+        int height = cpt.getFont().getSize() + 5;
+        int x = panel.getWidth() / 2 - width / 2;
+        int y = cpt.getBounds().y;
+        cpt.setBounds(x, y, width, height);
+        cpt.setBorder(null);
     }
 
     @Override
