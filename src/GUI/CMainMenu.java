@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import logic.CGameboard;
 import logic.CPlayer;
 import shared.CDialogs;
+import sounds.CAudioPlayer;
 
 /**
  *
@@ -32,7 +33,8 @@ public class CMainMenu extends JFrame implements ActionListener {
 
     public CMainMenu() {
         super(CDialogs.getString("title") + CGameboard.getVersion());
-
+        CAudioPlayer.init(); //initialize music
+        CAudioPlayer.play();
         setSize(400, 400);
         menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/mainMenu_bg.jpg")).getImage());
         add(menu);
@@ -43,6 +45,8 @@ public class CMainMenu extends JFrame implements ActionListener {
         languages = createButtonOnMenu(CDialogs.getString("lang"), 150);
         mAbout = createButtonOnMenu(CDialogs.getString("about"), 180);
         exit = createButtonOnMenu(CDialogs.getString("exitGame"), 210);
+      //  CAudioPlayer.init(); //initialize music
+        
     }
 
     private JButton createButtonOnMenu(String Name, int y) {
@@ -73,6 +77,7 @@ public class CMainMenu extends JFrame implements ActionListener {
             }
             if (name != null) {
                 CGameboard game = new CGameboard(new CPlayer(name));
+                CAudioPlayer.stop();
                 dispose();
             } else {
                 setVisible(true);
@@ -84,6 +89,7 @@ public class CMainMenu extends JFrame implements ActionListener {
             File tmp = CDialogs.load();
             if (tmp != null) {
                 CGameboard game = new CGameboard(tmp);
+                CAudioPlayer.stop();
                 dispose();
             }
         }
