@@ -20,6 +20,7 @@ public class CGameboard {
 
     private int mMaxLevel;
     private int mActualLevel;
+
     private int mGoal;
 
     private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
@@ -585,6 +586,10 @@ public class CGameboard {
             loadLevel(mActualLevel++);
         }
 
+    }
+    
+        public int getActualLevel() {
+        return mActualLevel;
     }
 
 }

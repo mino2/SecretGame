@@ -18,11 +18,12 @@ public class CAudioPlayer {
     private static Clip mClip = null;
     private static AudioInputStream mAudioIn;
     private static Sequencer sequencer;
+    private static int mActualSong = 0;
 
     public CAudioPlayer() {
     }
 
-    public static void init() {
+   /* public static void init() {
         try {
             if (mClip == null) { //no song was played, new track is needed to initialize
                 mAudioIn = AudioSystem.getAudioInputStream(CAudioPlayer.class.getResource("/sounds/media/doMenu.mid"));
@@ -39,12 +40,16 @@ public class CAudioPlayer {
         } catch (LineUnavailableException ex) {
             Logger.getLogger(CAudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
-    public static void play() {
+    public static void play(int songNumber) {
         try {
-            if (mClip == null) { //no song was played, new track is needed to initialize
-                mAudioIn = AudioSystem.getAudioInputStream(CAudioPlayer.class.getResource("/sounds/media/doMenu.mid"));
+            if (mClip == null || mActualSong != songNumber) { //no song was played, new track is needed to initialize
+                if(mActualSong != songNumber){
+                stop();
+                mActualSong = songNumber;
+                }
+                mAudioIn = AudioSystem.getAudioInputStream(CAudioPlayer.class.getResource("/sounds/media/"+songNumber+".mid"));
                 Mixer.Info[] arrMixerInfo = AudioSystem.getMixerInfo();
                 // Get a sound clip resource.
                 mClip = AudioSystem.getClip(arrMixerInfo[1]);
@@ -53,6 +58,9 @@ public class CAudioPlayer {
             }
             //clip.loop(0);
             mClip.loop(100);
+            FloatControl gainControl = (FloatControl) 
+            mClip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-25.0f); // Reduce volume by 10 decibels.
             //clip.drain();
             //clip.close();
         } catch (UnsupportedAudioFileException ex) {

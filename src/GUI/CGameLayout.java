@@ -99,7 +99,8 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         fitCompToFont(fullScreen);
         
         music = createCheckBoxOnMenu(CDialogs.getString("music"), offsetX, mWindowScale.height - 250, 100, 25);
-        music.setSelected(false);
+        music.setSelected(true);
+        CAudioPlayer.play(mGame.getActualLevel());
         fitCompToFont(music);
         
         save = createButtonOnMenu(CDialogs.getString("saveGame"), mWindowScale.height - 140);
@@ -275,7 +276,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         }
         if (e.getSource() == music) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                CAudioPlayer.play();
+                CAudioPlayer.play(mGame.getActualLevel());
             } else {
                 CAudioPlayer.stop();
             }

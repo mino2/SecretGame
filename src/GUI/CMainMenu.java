@@ -5,7 +5,6 @@
  */
 package GUI;
 
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -33,27 +32,31 @@ public class CMainMenu extends JFrame implements ActionListener {
 
     public CMainMenu() {
         super(CDialogs.getString("title") + CGameboard.getVersion());
-        CAudioPlayer.init(); //initialize music
-        CAudioPlayer.play();
+       // CAudioPlayer.init(); //initialize music
+        CAudioPlayer.play(0);
         setSize(400, 400);
+
         menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/mainMenu_bg.jpg")).getImage());
         add(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        //  setVisible(false);
         newGame = createButtonOnMenu(CDialogs.getString("newGame"), 90);
         load = createButtonOnMenu(CDialogs.getString("loadGame"), 120);
         languages = createButtonOnMenu(CDialogs.getString("lang"), 150);
         mAbout = createButtonOnMenu(CDialogs.getString("about"), 180);
         exit = createButtonOnMenu(CDialogs.getString("exitGame"), 210);
+        //  pack();
+        setVisible(true);
       //  CAudioPlayer.init(); //initialize music
-        
+
     }
 
     private JButton createButtonOnMenu(String Name, int y) {
         JButton button = new JButton(Name);
         button.setBounds(getSize().width / 20 - button.getText().length() * 8 / 2, y, button.getText().length() * 9, 18);
         CGameLayout.fitCompToFont(button, menu);
-       // button.setMargin(new Insets(0, 0, 0, 0));
+        // button.setMargin(new Insets(0, 0, 0, 0));
         menu.add(button);
         button.addActionListener(this);
         return button;
@@ -63,6 +66,7 @@ public class CMainMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == exit) {
+            CAudioPlayer.stop();
             CDialogs.exit(this);
         }
         if (e.getSource() == mAbout) {
@@ -76,8 +80,8 @@ public class CMainMenu extends JFrame implements ActionListener {
                 name = CDialogs.name();
             }
             if (name != null) {
-                CGameboard game = new CGameboard(new CPlayer(name));
                 CAudioPlayer.stop();
+                CGameboard game = new CGameboard(new CPlayer(name));          
                 dispose();
             } else {
                 setVisible(true);
@@ -88,8 +92,8 @@ public class CMainMenu extends JFrame implements ActionListener {
 
             File tmp = CDialogs.load();
             if (tmp != null) {
-                CGameboard game = new CGameboard(tmp);
                 CAudioPlayer.stop();
+                CGameboard game = new CGameboard(tmp);
                 dispose();
             }
         }
