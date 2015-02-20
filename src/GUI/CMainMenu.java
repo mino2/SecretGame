@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import java.awt.event.ActionEvent;
@@ -21,6 +16,8 @@ import sounds.CAudioPlayer;
  * @author Jirka
  */
 public class CMainMenu extends JFrame implements ActionListener {
+    
+     private static final long serialVersionUID = 56L;
 
     private final ImagePanel menu;
     private final JButton exit;
@@ -31,7 +28,7 @@ public class CMainMenu extends JFrame implements ActionListener {
     private final int mMaxNameLenght = 15;
 
     public CMainMenu() {
-        super(CDialogs.getString("title") + CGameboard.getVersion());
+        super(CDialogs.getString("title") + CDialogs.getVersion());
        // CAudioPlayer.init(); //initialize music
         CAudioPlayer.play(0);
         setSize(400, 400);
@@ -115,7 +112,7 @@ public class CMainMenu extends JFrame implements ActionListener {
         CGameLayout.fitCompToFont(mAbout, menu);
         exit.setText(CDialogs.getString("exitGame"));
         CGameLayout.fitCompToFont(exit, menu);
-        setTitle(CDialogs.getString("title") + CGameboard.getVersion());
+        setTitle(CDialogs.getString("title") + CDialogs.getVersion());
 
     }
 

@@ -8,6 +8,8 @@ import javax.swing.border.Border;
 
 public class CPlace extends JButton{
 
+   private static final long serialVersionUID = 45L;
+    
     public CDiamond mDiamond;
     private static final Border mSelectedBorder = BorderFactory.createLineBorder(Color.green, 4); //border around selected gem
     //private static final Border mNormalBorder = BorderFactory.createEmptyBorder();

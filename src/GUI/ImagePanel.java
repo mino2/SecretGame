@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUI;
 
 import java.awt.Dimension;
@@ -17,6 +12,8 @@ import javax.swing.JPanel;
  */
 public class ImagePanel extends JPanel{
 
+  private static final long serialVersionUID = 80L;
+    
   private Image img;
 
   public ImagePanel(String img) {

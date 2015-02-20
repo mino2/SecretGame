@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.io.Serializable;
         
 public class CDiamond implements Serializable{
+    
+    private static final long serialVersionUID = 55L;
+    
     private static int ID=1;
     public int mID;
     //pak dat private

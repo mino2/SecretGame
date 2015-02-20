@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class CPlayer implements Serializable{
     
+     private static final long serialVersionUID = 50L;
+    
     private final String mName;
     private int mScore;
 

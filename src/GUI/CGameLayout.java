@@ -15,6 +15,8 @@ import sounds.CAudioPlayer;
 
 public class CGameLayout extends JFrame implements ActionListener, ItemListener {
 
+    private static final long serialVersionUID = 42L;
+
     private FlowLayout experimentLayout = new FlowLayout();
     private JPanel desktop; //stores all buttons/diamonds for displaying
     private CGameboard mGame;
@@ -47,8 +49,8 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         super(CDialogs.getString("title") + version);
         mGame = cGame;
 
-        int gameboardX = mGame.mWidth * (diamondSizeX);
-        int gameboardY = mGame.mHeight * (diamondSizeY);
+        int gameboardX = mGame.getWidth() * (diamondSizeX);
+        int gameboardY = mGame.getHeight() * (diamondSizeY);
         if (CDiamondGame.DEBUG) {
             gameboardX += 20; //4px without default system window borders, 10 with, 20 with resizable
             gameboardY += sizeOfWindowLabel + 20;
@@ -92,17 +94,17 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         scoreLabel.setForeground(Color.white);
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
         fitCompToFont(scoreLabel);
-        
+
         menu.add(scoreLabel);
 
         fullScreen = createCheckBoxOnMenu(CDialogs.getString("fullScreen"), offsetX, mWindowScale.height - 230, 100, 25);
         fitCompToFont(fullScreen);
-        
+
         music = createCheckBoxOnMenu(CDialogs.getString("music"), offsetX, mWindowScale.height - 250, 100, 25);
         music.setSelected(true);
         CAudioPlayer.play(mGame.getActualLevel());
         fitCompToFont(music);
-        
+
         save = createButtonOnMenu(CDialogs.getString("saveGame"), mWindowScale.height - 140);
         fitCompToFont(save, menu);
         load = createButtonOnMenu(CDialogs.getString("loadGame"), mWindowScale.height - 120);
@@ -144,9 +146,9 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         experimentLayout.setVgap(0);
         experimentLayout.setHgap(0);
 
-        for (int i = 0; i < mGame.totalDiamonds; i++) {
-            int x = (i % mGame.mWidth);
-            int y = (i / mGame.mWidth);
+        for (int i = 0; i < mGame.getTotalDiamonds(); i++) {
+            int x = (i % mGame.getWidth());
+            int y = (i / mGame.getWidth());
             desktop.add(mGame.getItems().get(x).get(y));
             if (CDiamondGame.DEBUG) {
                 CPlace place = mGame.GetItem(x, y);
@@ -161,11 +163,11 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
 
         add(desktop, BorderLayout.CENTER);
 
-        for (int i = 0; i < mGame.totalDiamonds; i++) {
+        for (int i = 0; i < mGame.getTotalDiamonds(); i++) {
 
-            mGame.getItems().get(i % mGame.mWidth).get(i / mGame.mWidth)
+            mGame.getItems().get(i % mGame.getWidth()).get(i / mGame.getWidth())
                     .setPreferredSize(new Dimension(diamondSizeX, diamondSizeY));
-            mGame.getItems().get(i % mGame.mWidth).get(i / mGame.mWidth)
+            mGame.getItems().get(i % mGame.getWidth()).get(i / mGame.getWidth())
                     .setMinimumSize(new Dimension(diamondSizeX, diamondSizeY));
         }
     }
@@ -208,9 +210,9 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         if (tmp != null) {
             desktop.removeAll();
             mGame.loadGame(tmp);
-            for (int i = 0; i < mGame.totalDiamonds; i++) {
-                int x = (i % mGame.mWidth);
-                int y = (i / mGame.mWidth);
+            for (int i = 0; i < mGame.getTotalDiamonds(); i++) {
+                int x = (i % mGame.getWidth());
+                int y = (i / mGame.getWidth());
                 desktop.add(mGame.getItems().get(x).get(y));
             }
             desktop.revalidate();
@@ -219,6 +221,20 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
             updateScore();
         }
 
+    }
+
+    public void refreshLayout() {
+        desktop.removeAll();
+        for (int i = 0; i < mGame.getTotalDiamonds(); i++) {
+            int x = (i % mGame.getWidth());
+            int y = (i / mGame.getWidth());
+            desktop.add(mGame.getItems().get(x).get(y));
+        }
+
+        desktop.revalidate();
+        desktop.repaint();
+        player.setText(mGame.getPlayer().getName());
+        updateScore();
     }
 
     public void win() {
@@ -233,20 +249,20 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     public static void fitCompToFont(JCheckBox cpt) { //resize to fit text
         cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length() + 20, cpt.getFont().getSize() + 5));
     }
-    
+
     public static void fitCompToFont(JButton cpt) { //resize to fit text
         cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length(), cpt.getFont().getSize() + 5));
     }
 
     public static void fitCompToFont(JLabel cpt, JPanel panel) { //resize to fit text and center to panel
-        int width = cpt.getFont().getSize() * cpt.getText().length()/2; 
+        int width = cpt.getFont().getSize() * cpt.getText().length() / 2;
         int height = cpt.getFont().getSize() + 5;
         int x = panel.getWidth() / 2 - width / 2;
         int y = cpt.getBounds().y;
         cpt.setBounds(x, y, panel.getWidth(), height);
         cpt.setBorder(null);
     }
-    
+
     public static void fitCompToFont(JCheckBox cpt, JPanel panel) { //resize to fit text and center to panel
         int width = cpt.getFont().getSize() * cpt.getText().length() * 3 / 4;
         int height = cpt.getFont().getSize() + 5;

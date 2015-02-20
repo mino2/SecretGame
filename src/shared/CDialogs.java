@@ -8,12 +8,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import logic.CDiamondGame;
 import sounds.CAudioPlayer;
 
 public class CDialogs {
 
     private static Locale currentLocale = new Locale("en", "US");
     private static ResourceBundle messages;
+    private static final String version = "0.79"; //actual version
 
     private CDialogs() {
 
@@ -53,13 +55,13 @@ public class CDialogs {
         UIManager.put("FileChooser.openButtonText", messages.getString("open"));
         UIManager.put("FileChooser.saveButtonText", messages.getString("save"));
         UIManager.put("FileChooser.filesOfTypeLabelText", messages.getString("filesOfType"));
-        UIManager.put("FileChooser.fileNameLabelText", messages.getString("fileName")); 
-        UIManager.put("FileChooser.saveInLabelText",messages.getString("saveIn"));
+        UIManager.put("FileChooser.fileNameLabelText", messages.getString("fileName"));
+        UIManager.put("FileChooser.saveInLabelText", messages.getString("saveIn"));
 
         UIManager.put("OptionPane.yesButtonText", messages.getString("yes"));
         UIManager.put("OptionPane.noButtonText", messages.getString("no"));
         UIManager.put("OptionPane.cancelButtonText", messages.getString("cancel"));
-        
+
     }
 
     public static String getString(String key) {
@@ -75,7 +77,7 @@ public class CDialogs {
     }
 
     public static void exit(JFrame frame) {
-        if (JOptionPane.showConfirmDialog(frame, CDialogs.getString("sure?"),CDialogs.getString("exitGame"), JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+        if (JOptionPane.showConfirmDialog(frame, CDialogs.getString("sure?"), CDialogs.getString("exitGame"), JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
             frame.setVisible(false);
             CAudioPlayer.stop();
             frame.dispose();
@@ -83,7 +85,7 @@ public class CDialogs {
     }
 
     public static File load() {
-        JFileChooser chooser=saveAndLoad();
+        JFileChooser chooser = saveAndLoad();
         chooser.setDialogTitle(CDialogs.getString("loadGame"));
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
@@ -92,7 +94,7 @@ public class CDialogs {
     }
 
     public static File save() {
-        JFileChooser chooser=saveAndLoad();
+        JFileChooser chooser = saveAndLoad();
         chooser.setDialogTitle(CDialogs.getString("saveGame"));
 
         if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -100,13 +102,23 @@ public class CDialogs {
         }
         return null;
     }
-    
-    private static JFileChooser saveAndLoad(){
+
+    private static JFileChooser saveAndLoad() {
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File("."));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Saves", "sav");
         chooser.setFileFilter(filter);
-        chooser.setAcceptAllFileFilterUsed(false);  
+        chooser.setAcceptAllFileFilterUsed(false);
         return chooser;
+    }
+
+    public static void printDebug(String s) {
+        if (CDiamondGame.DEBUG) {
+            System.out.println(s);
+        }
+    }
+
+    public static String getVersion() {
+        return version;
     }
 }
