@@ -36,14 +36,14 @@ public class CMainMenu extends JFrame implements ActionListener {
         menu = new ImagePanel(new ImageIcon(this.getClass().getResource("/images/mainMenu_bg.jpg")).getImage());
         add(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
+       // setVisible(true);
         //  setVisible(false);
         newGame = createButtonOnMenu(CDialogs.getString("newGame"), 90);
         load = createButtonOnMenu(CDialogs.getString("loadGame"), 120);
         languages = createButtonOnMenu(CDialogs.getString("lang"), 150);
         mAbout = createButtonOnMenu(CDialogs.getString("about"), 180);
         exit = createButtonOnMenu(CDialogs.getString("exitGame"), 210);
-        //  pack();
+        pack();
         setVisible(true);
       //  CAudioPlayer.init(); //initialize music
 

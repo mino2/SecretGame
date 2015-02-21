@@ -60,7 +60,7 @@ public class CLevel {
     {
         items.clear();
         mLevelNumber++;
-        mGoal= 1000 * mLevelNumber;
+        mGoal= 200 * mLevelNumber;
         generateNewLevel();
         initLevel();
     }
@@ -422,6 +422,7 @@ public class CLevel {
                 deselectDiamond(mFirstActive);
                 selectDiamond(clickDiamond);
             }
+            mGame.winLevel();
         }
     }
 

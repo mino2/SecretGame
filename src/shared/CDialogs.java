@@ -15,7 +15,7 @@ public class CDialogs {
 
     private static Locale currentLocale = new Locale("en", "US");
     private static ResourceBundle messages;
-    private static final String version = "0.79"; //actual version
+    private static final String version = "0.89"; //actual version
 
     private CDialogs() {
 

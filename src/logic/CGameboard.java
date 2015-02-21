@@ -72,7 +72,7 @@ public class CGameboard {
     public void updateScore(int score) {
         if (wasStartCount) {
             mPlayer.incrementScore(score);
-            winLevel();
+            //winLevel();
             mGameLayout.updateScore();
         }
     }
@@ -104,7 +104,7 @@ public class CGameboard {
      }
 
 
-    private void winLevel() {
+    public void winLevel() {
 
         if (mLevel.getGoal() <= mPlayer.getScore()) {
 
@@ -113,7 +113,9 @@ public class CGameboard {
                 
             }
             mLevel.updateLevel();
-            mGameLayout.refreshLayout();
+            mGameLayout.dispose();
+            mGameLayout = new CGameLayout(CDialogs.getVersion(), this);
+            //mGameLayout.refreshLayout();
         }
 
     }
