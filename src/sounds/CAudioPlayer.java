@@ -48,7 +48,6 @@ public class CAudioPlayer {
         } catch (LineUnavailableException ex) {
             Logger.getLogger(CAudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public static void stop() {
