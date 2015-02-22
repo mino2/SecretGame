@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import shared.CDialogs;
+import shared.CFunctions;
 
 public class CLevel {
 
@@ -27,7 +28,6 @@ public class CLevel {
     public CLevel(int level, CGameboard game) {
         mGame = game;
         mLevelNumber = level;
-        mGoal = 100 * level;
         initColors();
         generateNewLevel();
         initLevel();
@@ -40,7 +40,7 @@ public class CLevel {
 
         switch (mLevelNumber) {
             case 1:
-                mWidth =8;
+                mWidth = 8;
                 mHeight = 8;
                 break;
             case 2:
@@ -55,18 +55,16 @@ public class CLevel {
         }
         totalDiamonds = mWidth * mHeight;
     }
-    
-    public void updateLevel()
-    {
+
+    public void updateLevel() {
         items.clear();
         mLevelNumber++;
-        mGoal= 200 * mLevelNumber;
         generateNewLevel();
         initLevel();
     }
 
     private void initLevel() {
-
+        mGoal = 50 * mLevelNumber;
         mFirstActive = new Dimension(-1, -1);
         mSecondActive = new Dimension(-1, -1);
         items = new ArrayList<>();
@@ -136,7 +134,7 @@ public class CLevel {
      */
     public void swap(Dimension first, Dimension second) {
         if (CDiamondGame.DEBUG) {
-            CDialogs.printDebug("SWAPPING :-)");
+            CFunctions.printDebug("SWAPPING :-)");
         }
         CDiamond tmpGem = items.get(first.width).get(first.height).mDiamond;
         items.get(first.width).get(first.height).mDiamond = items.get(second.width).get(second.height).mDiamond;
@@ -177,10 +175,10 @@ public class CLevel {
             items.get(pos.width).get(pos.height).mDiamond = generateRandDiamond();
             //swap(items.get(pos.getX()).get(pos.getY()), tmp);
             //SetItem(pos, tmp);
-            CDialogs.printDebug("falling new " + upper + " on " + pos.height + " (" + pos.width + ")" + items.get(pos.width).get(pos.height).mDiamond.getColor());
+            CFunctions.printDebug("falling new " + upper + " on " + pos.height + " (" + pos.width + ")" + items.get(pos.width).get(pos.height).mDiamond.getColor());
         } else {
             swap(pos, new Dimension(pos.width, upper));//now the upper gem will be invalid
-            CDialogs.printDebug("falling " + upper + " on " + pos.height + " (" + pos.width + ")");
+            CFunctions.printDebug("falling " + upper + " on " + pos.height + " (" + pos.width + ")");
         }
     }
 
@@ -209,7 +207,7 @@ public class CLevel {
                     if (!items.get(i).get(j).isValide()) {
                         Dimension pos = new Dimension(i, j);
                         fall(pos);
-                        CDialogs.printDebug("After fall " + items.get(i).get(j).getColor());
+                        CFunctions.printDebug("After fall " + items.get(i).get(j).getColor());
                         changed = true;
                     }
                 }
@@ -220,7 +218,7 @@ public class CLevel {
                     if (tryDiamond(new Dimension(i, j))) {
                         Dimension pos = new Dimension(i, j);
                         CleanDiamonds(getNeighboursToDelete(pos));
-                        CDialogs.printDebug("After fall " + items.get(i).get(j).getColor());
+                        CFunctions.printDebug("After fall " + items.get(i).get(j).getColor());
                         changed = true;
                     }
                 }
@@ -261,14 +259,14 @@ public class CLevel {
         ArrayList<Dimension> neighbours = new ArrayList<>();
 
         Color refColor = items.get(Active.width).get(Active.height).getColor();
-        CDialogs.printDebug("refColor je: " + refColor);
+        CFunctions.printDebug("refColor je: " + refColor);
         boolean horMatch = false;
         boolean vertMatch = false;
 
         //find the most left place of the same color
         int left = Active.width;
         while (left - 1 >= 0 && items.get(left - 1).get(Active.height).getColor().equals(refColor)) {
-            CDialogs.printDebug("porovnavam vlevo s: " + items.get(left - 1).get(Active.height).getColor());
+            CFunctions.printDebug("porovnavam vlevo s: " + items.get(left - 1).get(Active.height).getColor());
             left--;
         }
         int mostLeft = left;
@@ -282,7 +280,7 @@ public class CLevel {
         //find the lowest place of the same color
         int up = Active.height;
         while (up - 1 >= 0 && items.get(Active.width).get(up - 1).getColor().equals(refColor)) {
-            CDialogs.printDebug("porovnavam nahore s: " + items.get(Active.width).get(up - 1).getColor());
+            CFunctions.printDebug("porovnavam nahore s: " + items.get(Active.width).get(up - 1).getColor());
             up--;
         }
         int mostUp = up;
@@ -429,7 +427,7 @@ public class CLevel {
     private void selectDiamond(Dimension pos) {
         if (pos.width < 0 || pos.height < 0) {
             if (CDiamondGame.DEBUG) {
-                CDialogs.printDebug("SELECTING bad diamond bro");
+                CFunctions.printDebug("SELECTING bad diamond bro");
             }
             return;
         }
@@ -467,7 +465,6 @@ public class CLevel {
     }
 
     private void CleanDiamonds(ArrayList<Dimension> positions) {
-
         mGame.updateScore(positions.size());
         for (Dimension position : positions) {
             destroyGem(position);

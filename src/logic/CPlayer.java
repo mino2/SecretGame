@@ -25,6 +25,10 @@ public class CPlayer implements Serializable{
     public int getScore() {
         return mScore;
     }
+    
+    public void setScore(int value){
+        mScore = value;
+    }
 
     public String getName() {
         return mName;

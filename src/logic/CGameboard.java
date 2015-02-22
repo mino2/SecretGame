@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import shared.CDialogs;
+import shared.CFunctions;
 
 public class CGameboard {
 
@@ -18,7 +19,7 @@ public class CGameboard {
 
     private int mMaxLevel;
 
-   // private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
+    // private ArrayList<ArrayList<CPlace>> items; //stores diamonds for access
     // public int totalDiamonds; //just mWidth*mHeight for shorter notation
     // private ArrayList<Color> mAllColors; //all possible collors for diamonds
     private CPlayer mPlayer;
@@ -33,15 +34,15 @@ public class CGameboard {
         mPlayer = player;
         wasStartCount = false;
         mLevel = new CLevel(1, this);
-        mMaxLevel=3;
-        mGameLayout = new CGameLayout(CDialogs.getVersion(), this);
+        mMaxLevel = 3;
+        mGameLayout = new CGameLayout(CFunctions.getVersion(), this);
         initGameboard();
     }
 
     public CGameboard(File path) {
 
         loadGame(path);
-        mGameLayout = new CGameLayout(CDialogs.getVersion(), this);
+        mGameLayout = new CGameLayout(CFunctions.getVersion(), this);
     }
 
     /**
@@ -82,39 +83,43 @@ public class CGameboard {
     }
 
     public void save(File path) {
-     try {
-     ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path + ".sav"));
-     mLevel.Save(os);
-     os.writeObject(mPlayer);
-     } catch (Exception ex) {
-     System.err.println(ex);
-     }
-     }
+        try {
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path + ".sav"));
+            mLevel.Save(os);
+            os.writeObject(mPlayer);
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+    }
 
-     public void loadGame(File path) {
-     try {
-     ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
-     mLevel=new CLevel(0, this);
-     mLevel.Load(in);
-     mPlayer = ((CPlayer) in.readObject());
-     wasStartCount = true;
-     } catch (Exception ex) {
-     System.err.println(ex);
-     }
-     }
-
+    public void loadGame(File path) {
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
+            mLevel = new CLevel(0, this);
+            mLevel.Load(in);
+            mPlayer = ((CPlayer) in.readObject());
+            wasStartCount = true;
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+    }
 
     public void winLevel() {
-
         if (mLevel.getGoal() <= mPlayer.getScore()) {
-
+            shared.CFunctions.printDebug("\n\n\n\n\n dosazen goal "+mLevel.getGoal()+" pomoci score "+mPlayer.getScore() +" v levelu "+mLevel.getLevelNumber());
             if (mLevel.getLevelNumber() >= mMaxLevel) {
-                mGameLayout.win();
-                
+                shared.CFunctions.printDebug("\n\n\nUplne vitezstvi!!!");
+                shared.CDialogs.win(mGameLayout);
+                return;
             }
+            wasStartCount = false;
+            shared.CFunctions.printDebug("\n\n\nUpdatuju level");
+            mPlayer.setScore(mLevel.getGoal());
             mLevel.updateLevel();
+            shared.CFunctions.printDebug("\n\n\njsem v leveu " +mLevel.getLevelNumber() +" se score "+ mPlayer.getScore());
+            wasStartCount = true;
             mGameLayout.dispose();
-            mGameLayout = new CGameLayout(CDialogs.getVersion(), this);
+            mGameLayout = new CGameLayout(CFunctions.getVersion(), this);
             //mGameLayout.refreshLayout();
         }
 

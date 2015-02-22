@@ -11,6 +11,7 @@ import logic.CDiamondGame;
 import logic.CGameboard;
 import logic.CPlace;
 import shared.CDialogs;
+import shared.CLangs;
 import sounds.CAudioPlayer;
 
 public class CGameLayout extends JFrame implements ActionListener, ItemListener {
@@ -46,7 +47,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
      * @param cGame
      */
     public CGameLayout(String version, CGameboard cGame) {
-        super(CDialogs.getString("title") + version);
+        super(CLangs.getString("title") + version);
         mGame = cGame;
 
         int gameboardX = mGame.getWidth() * (diamondSizeX);
@@ -90,28 +91,28 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         fitCompToFont(player, menu);
         menu.add(player);
 
-        scoreLabel = new JLabel(CDialogs.getString("score") + mGame.getPlayer().getScore());
+        scoreLabel = new JLabel(CLangs.getString("score") + mGame.getPlayer().getScore());
         scoreLabel.setForeground(Color.white);
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
         fitCompToFont(scoreLabel);
 
         menu.add(scoreLabel);
 
-        fullScreen = createCheckBoxOnMenu(CDialogs.getString("fullScreen"), offsetX, mWindowScale.height - 230, 100, 25);
+        fullScreen = createCheckBoxOnMenu(CLangs.getString("fullScreen"), offsetX, mWindowScale.height - 230, 100, 25);
         fitCompToFont(fullScreen);
 
-        music = createCheckBoxOnMenu(CDialogs.getString("music"), offsetX, mWindowScale.height - 250, 100, 25);
+        music = createCheckBoxOnMenu(CLangs.getString("music"), offsetX, mWindowScale.height - 250, 100, 25);
         music.setSelected(true);
         CAudioPlayer.play(mGame.getActualLevel());
         fitCompToFont(music);
 
-        save = createButtonOnMenu(CDialogs.getString("saveGame"), mWindowScale.height - 140);
+        save = createButtonOnMenu(CLangs.getString("saveGame"), mWindowScale.height - 140);
         fitCompToFont(save, menu);
-        load = createButtonOnMenu(CDialogs.getString("loadGame"), mWindowScale.height - 120);
+        load = createButtonOnMenu(CLangs.getString("loadGame"), mWindowScale.height - 120);
         fitCompToFont(load, menu);
-        mAbout = createButtonOnMenu(CDialogs.getString("about"), mWindowScale.height - 100);
+        mAbout = createButtonOnMenu(CLangs.getString("about"), mWindowScale.height - 100);
         fitCompToFont(mAbout, menu);
-        exit = createButtonOnMenu(CDialogs.getString("exitGame"), mWindowScale.height - 80);
+        exit = createButtonOnMenu(CLangs.getString("exitGame"), mWindowScale.height - 80);
         fitCompToFont(exit, menu);
 
     }
@@ -173,7 +174,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     }
 
     public void updateScore() {
-        scoreLabel.setText(CDialogs.getString("score") + mGame.getPlayer().getScore());
+        scoreLabel.setText(CLangs.getString("score") + mGame.getPlayer().getScore());
     }
 
     /**
@@ -237,10 +238,6 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         updateScore();
     }
 
-    public void win() {
-        JOptionPane.showMessageDialog(this, "Congratulations");
-
-    }
 
     public static void fitCompToFont(JLabel cpt) { //resize to fit text
         cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length(), cpt.getFont().getSize() + 5));

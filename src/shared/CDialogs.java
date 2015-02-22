@@ -1,5 +1,6 @@
 package shared;
 
+import GUI.CGameLayout;
 import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -13,71 +14,31 @@ import sounds.CAudioPlayer;
 
 public class CDialogs {
 
-    private static Locale currentLocale = new Locale("en", "US");
-    private static ResourceBundle messages;
-    private static final String version = "0.89"; //actual version
-
     private CDialogs() {
-
     }
 
     public static void changeLang() {
 
-        String language;
-        Object[] possibilities = {"english", "czech", "roumenstina"};
-        String s = (String) JOptionPane.showInputDialog(
-                null,
-                messages.getString("chooseLang"),
-                getString("lang"),
+        String s = (String) JOptionPane.showInputDialog(null,
+                CLangs.messages.getString("chooseLang"),
+                CLangs.getString("lang"),
                 JOptionPane.PLAIN_MESSAGE,
                 null,
-                possibilities,
-                "english");
-        if (s != null) {
-            language = s.substring(0, 2);
-            if ("en".equals(language)) {
-                currentLocale = new Locale(language, "US");
-            }
-            if ("cz".equals(language)) {
-                currentLocale = new Locale(language, "CZ");
-            }
-            if ("ro".equals(language)) {
-                currentLocale = new Locale(language, "RM");
-            }
-        }
-        init();
-    }
-
-    public static void init() {
-        messages = ResourceBundle.getBundle("lang/lang", currentLocale);
-        UIManager.put("FileChooser.lookInLabelText", messages.getString("lookIn"));
-        UIManager.put("FileChooser.cancelButtonText", messages.getString("cancel"));
-        UIManager.put("FileChooser.openButtonText", messages.getString("open"));
-        UIManager.put("FileChooser.saveButtonText", messages.getString("save"));
-        UIManager.put("FileChooser.filesOfTypeLabelText", messages.getString("filesOfType"));
-        UIManager.put("FileChooser.fileNameLabelText", messages.getString("fileName"));
-        UIManager.put("FileChooser.saveInLabelText", messages.getString("saveIn"));
-
-        UIManager.put("OptionPane.yesButtonText", messages.getString("yes"));
-        UIManager.put("OptionPane.noButtonText", messages.getString("no"));
-        UIManager.put("OptionPane.cancelButtonText", messages.getString("cancel"));
-
-    }
-
-    public static String getString(String key) {
-        return messages.getString(key);
+                CLangs.possibilities,
+                CLangs.possibilities[0]);
+        CLangs.init(s);
     }
 
     public static String name() {
-        return JOptionPane.showInputDialog(null, messages.getString("nickname"), messages.getString("hero"), JOptionPane.INFORMATION_MESSAGE);
+        return JOptionPane.showInputDialog(null, CLangs.messages.getString("nickname"), CLangs.messages.getString("hero"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void about() {
-        JOptionPane.showMessageDialog(null, messages.getString("about") + ":\nKvido - Ing. Kvido\nPaladin - Ing. Jiří Kožusznik\nMr. R. - " + messages.getString("Mr.R."));
+        JOptionPane.showMessageDialog(null, CLangs.messages.getString("about") + ":\nKvido - Ing. Kvido\nPaladin - Ing. Jiří Kožusznik\nMr. R. - " + CLangs.messages.getString("Mr.R."));
     }
 
     public static void exit(JFrame frame) {
-        if (JOptionPane.showConfirmDialog(frame, CDialogs.getString("sure?"), CDialogs.getString("exitGame"), JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+        if (JOptionPane.showConfirmDialog(frame, CLangs.getString("sure?"), CLangs.getString("exitGame"), JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
             frame.setVisible(false);
             CAudioPlayer.stop();
             frame.dispose();
@@ -86,7 +47,7 @@ public class CDialogs {
 
     public static File load() {
         JFileChooser chooser = saveAndLoad();
-        chooser.setDialogTitle(CDialogs.getString("loadGame"));
+        chooser.setDialogTitle(CLangs.getString("loadGame"));
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
         }
@@ -95,7 +56,7 @@ public class CDialogs {
 
     public static File save() {
         JFileChooser chooser = saveAndLoad();
-        chooser.setDialogTitle(CDialogs.getString("saveGame"));
+        chooser.setDialogTitle(CLangs.getString("saveGame"));
 
         if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
@@ -112,13 +73,14 @@ public class CDialogs {
         return chooser;
     }
 
-    public static void printDebug(String s) {
-        if (CDiamondGame.DEBUG) {
-            System.out.println(s);
-        }
-    }
-
-    public static String getVersion() {
-        return version;
+    public static void win(CGameLayout layout) {
+       // JOptionPane.showMessageDialog(cGameLayout, "Congratulations");
+            CAudioPlayer.stop();
+            CAudioPlayer.play(101);
+            JOptionPane.showMessageDialog(layout, CLangs.getString("congrats")/*napis*/, CLangs.getString("congrats")/*title*/, JOptionPane.YES_OPTION);
+            layout.setVisible(false);
+            
+            CAudioPlayer.stop();
+            layout.dispose();
     }
 }

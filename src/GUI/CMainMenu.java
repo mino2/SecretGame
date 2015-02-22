@@ -9,12 +9,10 @@ import javax.swing.JFrame;
 import logic.CGameboard;
 import logic.CPlayer;
 import shared.CDialogs;
+import shared.CFunctions;
+import shared.CLangs;
 import sounds.CAudioPlayer;
 
-/**
- *
- * @author Jirka
- */
 public class CMainMenu extends JFrame implements ActionListener {
     
      private static final long serialVersionUID = 56L;
@@ -28,7 +26,7 @@ public class CMainMenu extends JFrame implements ActionListener {
     private final int mMaxNameLenght = 15;
 
     public CMainMenu() {
-        super(CDialogs.getString("title") + CDialogs.getVersion());
+        super(CLangs.getString("title") + CFunctions.getVersion());
        // CAudioPlayer.init(); //initialize music
         CAudioPlayer.play(0);
         setSize(400, 400);
@@ -38,11 +36,11 @@ public class CMainMenu extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        // setVisible(true);
         //  setVisible(false);
-        newGame = createButtonOnMenu(CDialogs.getString("newGame"), 90);
-        load = createButtonOnMenu(CDialogs.getString("loadGame"), 120);
-        languages = createButtonOnMenu(CDialogs.getString("lang"), 150);
-        mAbout = createButtonOnMenu(CDialogs.getString("about"), 180);
-        exit = createButtonOnMenu(CDialogs.getString("exitGame"), 210);
+        newGame = createButtonOnMenu(CLangs.getString("newGame"), 90);
+        load = createButtonOnMenu(CLangs.getString("loadGame"), 120);
+        languages = createButtonOnMenu(CLangs.getString("lang"), 150);
+        mAbout = createButtonOnMenu(CLangs.getString("about"), 180);
+        exit = createButtonOnMenu(CLangs.getString("exitGame"), 210);
         pack();
         setVisible(true);
       //  CAudioPlayer.init(); //initialize music
@@ -63,7 +61,7 @@ public class CMainMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == exit) {
-            CAudioPlayer.stop();
+           // CAudioPlayer.stop();
             CDialogs.exit(this);
         }
         if (e.getSource() == mAbout) {
@@ -102,17 +100,17 @@ public class CMainMenu extends JFrame implements ActionListener {
     }
 
     public void updateLang() {
-        newGame.setText(CDialogs.getString("newGame"));
+        newGame.setText(CLangs.getString("newGame"));
         CGameLayout.fitCompToFont(newGame, menu);
-        load.setText(CDialogs.getString("loadGame"));
+        load.setText(CLangs.getString("loadGame"));
         CGameLayout.fitCompToFont(load, menu);
-        languages.setText(CDialogs.getString("lang"));
+        languages.setText(CLangs.getString("lang"));
         CGameLayout.fitCompToFont(languages, menu);
-        mAbout.setText(CDialogs.getString("about"));
+        mAbout.setText(CLangs.getString("about"));
         CGameLayout.fitCompToFont(mAbout, menu);
-        exit.setText(CDialogs.getString("exitGame"));
+        exit.setText(CLangs.getString("exitGame"));
         CGameLayout.fitCompToFont(exit, menu);
-        setTitle(CDialogs.getString("title") + CDialogs.getVersion());
+        setTitle(CLangs.getString("title") + CFunctions.getVersion());
 
     }
 

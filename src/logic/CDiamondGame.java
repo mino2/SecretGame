@@ -2,6 +2,7 @@ package logic;
 
 import GUI.CMainMenu;
 import shared.CDialogs;
+import shared.CLangs;
 
 public class CDiamondGame {
     public static boolean DEBUG = true;
@@ -13,7 +14,7 @@ public class CDiamondGame {
         /*For choose lang before start game*/
         //CDialogs.changeLang();
         /*For default lang*/
-        CDialogs.init();
+        CLangs.init(null);
         CMainMenu menu=new CMainMenu();
         
     }
