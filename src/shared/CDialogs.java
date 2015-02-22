@@ -77,7 +77,7 @@ public class CDialogs {
        // JOptionPane.showMessageDialog(cGameLayout, "Congratulations");
             CAudioPlayer.stop();
             CAudioPlayer.play(101);
-            JOptionPane.showMessageDialog(layout, CLangs.getString("congrats")/*napis*/, CLangs.getString("congrats")/*title*/, JOptionPane.YES_OPTION);
+            JOptionPane.showMessageDialog(layout, CLangs.getString("congrats")/*napis*/, CLangs.getString("congrats")/*title*/, JOptionPane.INFORMATION_MESSAGE);
             layout.setVisible(false);
             
             CAudioPlayer.stop();
