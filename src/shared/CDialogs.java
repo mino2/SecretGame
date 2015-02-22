@@ -2,14 +2,10 @@ package shared;
 
 import GUI.CGameLayout;
 import java.io.File;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import logic.CDiamondGame;
 import sounds.CAudioPlayer;
 
 public class CDialogs {
@@ -59,7 +55,11 @@ public class CDialogs {
         chooser.setDialogTitle(CLangs.getString("saveGame"));
 
         if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-            return chooser.getSelectedFile();
+            if (chooser.getSelectedFile().exists()) {
+                return new File(chooser.getSelectedFile().getName().substring(0, chooser.getSelectedFile().getName().length() - 4));
+            } else {
+                return chooser.getSelectedFile();
+            }
         }
         return null;
     }
@@ -74,13 +74,13 @@ public class CDialogs {
     }
 
     public static void win(CGameLayout layout) {
-       // JOptionPane.showMessageDialog(cGameLayout, "Congratulations");
-            CAudioPlayer.stop();
-            CAudioPlayer.play(101);
-            JOptionPane.showMessageDialog(layout, CLangs.getString("congrats")/*napis*/, CLangs.getString("congrats")/*title*/, JOptionPane.INFORMATION_MESSAGE);
-            layout.setVisible(false);
-            
-            CAudioPlayer.stop();
-            layout.dispose();
+        // JOptionPane.showMessageDialog(cGameLayout, "Congratulations");
+        CAudioPlayer.stop();
+        CAudioPlayer.play(101);
+        JOptionPane.showMessageDialog(layout, CLangs.getString("congrats")/*napis*/, CLangs.getString("congrats")/*title*/, JOptionPane.INFORMATION_MESSAGE);
+        layout.setVisible(false);
+
+        CAudioPlayer.stop();
+        layout.dispose();
     }
 }

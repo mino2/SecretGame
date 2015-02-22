@@ -1,7 +1,6 @@
 package logic;
 
 import GUI.CMainMenu;
-import shared.CDialogs;
 import shared.CLangs;
 
 public class CDiamondGame {
