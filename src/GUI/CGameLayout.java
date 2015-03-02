@@ -25,6 +25,7 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     private JPanel menu;
     private JLabel player;
     private JLabel scoreLabel;
+    private JLabel levelLabel;
     private JButton exit;
     private JButton mAbout;
     private JButton save;
@@ -49,24 +50,16 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
     public CGameLayout(String version, CGameboard cGame) {
         super(CLangs.getString("title") + version);
         mGame = cGame;
-
-        int gameboardX = mGame.getWidth() * (diamondSizeX);
-        int gameboardY = mGame.getHeight() * (diamondSizeY);
+        repaintWindow();
+        
         if (CDiamondGame.DEBUG) {
-            gameboardX += 20; //4px without default system window borders, 10 with, 20 with resizable
-            gameboardY += sizeOfWindowLabel + 20;
             setUndecorated(false);
-            mWindowScale = new Dimension(gameboardX + mMenuWidth, gameboardY);
-            setSize(mWindowScale);
             setResizable(true);
         } else {
-            gameboardX += 4; //4px without default system window borders, 10 with
-            gameboardY += 4; //4px without default system window borders, 10 with
-            setSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
-            setExtendedState(MAXIMIZED_BOTH);
             setUndecorated(true);
             setResizable(false);
         }
+        
         //    setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         createAndShowGUI();
@@ -95,8 +88,14 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         scoreLabel.setForeground(Color.white);
         scoreLabel.setBounds(offsetX, 20, 100, fontik.getSize() + 5);
         fitCompToFont(scoreLabel);
-
         menu.add(scoreLabel);
+
+        levelLabel = new JLabel(CLangs.getString("level") + mGame.getActualLevel());
+        levelLabel.setForeground(Color.black);
+        levelLabel.setBounds(offsetX, 50, 100, fontik.getSize() + 5);
+        fitCompToFont(levelLabel);
+
+        menu.add(levelLabel);
 
         fullScreen = createCheckBoxOnMenu(CLangs.getString("fullScreen"), offsetX, mWindowScale.height - 230, 100, 25);
         fitCompToFont(fullScreen);
@@ -177,6 +176,10 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
         scoreLabel.setText(CLangs.getString("score") + mGame.getPlayer().getScore());
     }
 
+    public void updateLevelLabel() {
+        levelLabel.setText(CLangs.getString("level") + mGame.getActualLevel());
+    }
+
     /**
      * Create the GUI and show it. For thread safety, this method should be
      * invoked from the event dispatch thread.
@@ -216,28 +219,36 @@ public class CGameLayout extends JFrame implements ActionListener, ItemListener 
                 int y = (i / mGame.getWidth());
                 desktop.add(mGame.getItems().get(x).get(y));
             }
+            repaintWindow();
             desktop.revalidate();
             desktop.repaint();
             player.setText(mGame.getPlayer().getName());
             updateScore();
+            updateLevelLabel();
+            CAudioPlayer.play(mGame.getActualLevel());
         }
 
     }
 
-    public void refreshLayout() {
-        desktop.removeAll();
-        for (int i = 0; i < mGame.getTotalDiamonds(); i++) {
-            int x = (i % mGame.getWidth());
-            int y = (i / mGame.getWidth());
-            desktop.add(mGame.getItems().get(x).get(y));
+    private void repaintWindow() {
+        int gameboardX = mGame.getWidth() * (diamondSizeX);
+        int gameboardY = mGame.getHeight() * (diamondSizeY);
+        if (CDiamondGame.DEBUG) {
+            gameboardX += 20; //4px without default system window borders, 10 with, 20 with resizable
+            gameboardY += sizeOfWindowLabel + 20;
+        //    setUndecorated(false);
+            mWindowScale = new Dimension(gameboardX + mMenuWidth, gameboardY);
+            setSize(mWindowScale);
+        //    setResizable(true);
+        } else {
+            gameboardX += 4; //4px without default system window borders, 10 with
+            gameboardY += 4; //4px without default system window borders, 10 with
+            setSize(new Dimension(gameboardX + mMenuWidth, gameboardY));
+            setExtendedState(MAXIMIZED_BOTH);
+        //    setUndecorated(true);
+         //   setResizable(false);
         }
-
-        desktop.revalidate();
-        desktop.repaint();
-        player.setText(mGame.getPlayer().getName());
-        updateScore();
     }
-
 
     public static void fitCompToFont(JLabel cpt) { //resize to fit text
         cpt.setSize(new Dimension(cpt.getFont().getSize() * cpt.getText().length(), cpt.getFont().getSize() + 5));

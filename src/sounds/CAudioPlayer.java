@@ -25,7 +25,7 @@ public class CAudioPlayer {
                 }
                 if (mActualSong > 100) {
                     mAudioIn = AudioSystem.getAudioInputStream(CAudioPlayer.class.getResource("/sounds/media/" + songNumber + ".wav"));
-                    loops = 0;
+                    loops = 0; //because this is very brutal last song and only one play is enough for living creatures to survive
                 } else {
                     mAudioIn = AudioSystem.getAudioInputStream(CAudioPlayer.class.getResource("/sounds/media/" + songNumber + ".mid"));
                 }

@@ -1,0 +1,2 @@
+jmena < 100 koncovka .mid
+jmena > 100 koncovka .wav

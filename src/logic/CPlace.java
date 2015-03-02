@@ -10,15 +10,15 @@ public class CPlace extends JButton{
 
    private static final long serialVersionUID = 45L;
     
-    public CDiamond mDiamond;
+    public CItem mDiamond;
     private static final Border mSelectedBorder = BorderFactory.createLineBorder(Color.green, 4); //border around selected gem
     //private static final Border mNormalBorder = BorderFactory.createEmptyBorder();
     private static final Border mNormalBorder = BorderFactory.createLineBorder(Color.black, 1); //border around all gems
 
-    public CPlace(CDiamond diamond) {
+    public CPlace(CItem item) {
         super();
-        mDiamond = diamond;
-        setColor(diamond.mColor);
+        mDiamond = item;
+        setColor(item.mColor);
     }
 
     private void setColor(Color c) {
@@ -46,6 +46,9 @@ public class CPlace extends JButton{
         if (c.equals(Color.red)) {
             this.setIcon(new ImageIcon(this.getClass().getResource("/images/diamond_red.png")));
         }
+        if (c.equals(Color.black)) {
+            this.setIcon(new ImageIcon(this.getClass().getResource("/images/wall.png")));
+        }
         //setText(""+mDiamond.mID);
     }
 
@@ -61,7 +64,7 @@ public class CPlace extends JButton{
      *
      * @param diam
      */
-    public void createMe(CDiamond diam) {
+    public void createMe(CItem diam) {
         mDiamond = diam;
         setColor(diam.mColor);
     }

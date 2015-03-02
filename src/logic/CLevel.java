@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Set;
 import shared.CFunctions;
 
 public class CLevel {
@@ -35,6 +36,8 @@ public class CLevel {
     private void generateNewLevel() {
 
         mWalls = new ArrayList<>();
+        Set mnozinka;
+
         mValuable = new ArrayList<>();
 
         switch (mLevelNumber) {
@@ -50,6 +53,9 @@ public class CLevel {
             default:
                 mWidth = 5;
                 mHeight = 5;
+                mWalls.add(new Dimension(3, 3));
+                mWalls.add(new Dimension(4, 4));
+                mWalls.add(new Dimension(2, 2));
                 break;
         }
         totalDiamonds = mWidth * mHeight;
@@ -72,12 +78,15 @@ public class CLevel {
         for (int i = 0; i < mWidth; i++) { //initialize columns in the first row
             items.add(new ArrayList<>());
         }
-
         for (int i = 0; i < totalDiamonds; i++) {
-            place = new CPlace(generateRandDiamond());
-            place.addActionListener(new ActionListenerDiamond());
+            if (mWalls.contains(new Dimension(i % mWidth, i / mWidth))) {
+                place = new CPlace(generateWall());
+                place.addActionListener(new ActionListenerDiamond());
+            } else {
+                place = new CPlace(generateRandDiamond());
+                place.addActionListener(new ActionListenerDiamond());
+            }
             place.deselectMe();
-
             items.get(i % mWidth).add(place); //adding diamonds from left to right
             //    group.add(place);
         }
@@ -135,7 +144,7 @@ public class CLevel {
         if (CDiamondGame.DEBUG) {
             CFunctions.printDebug("SWAPPING :-)");
         }
-        CDiamond tmpGem = items.get(first.width).get(first.height).mDiamond;
+        CItem tmpGem = items.get(first.width).get(first.height).mDiamond;
         items.get(first.width).get(first.height).mDiamond = items.get(second.width).get(second.height).mDiamond;
         items.get(second.width).get(second.height).mDiamond = tmpGem;
     }
@@ -147,9 +156,14 @@ public class CLevel {
      *
      * @return generated place
      */
-    public CDiamond generateRandDiamond() {
+    public CItem generateRandDiamond() {
         Color Dcolor = mAllColors.get((int) (Math.random() * mAllColors.size()));
-        return new CDiamond(Dcolor, true);
+        return new CItem(Dcolor, true);
+    }
+
+    public CItem generateWall() {
+        Color Dcolor = Color.black;
+        return new CItem(Dcolor, false);
     }
 
     /**
@@ -166,7 +180,7 @@ public class CLevel {
      */
     public void fall(Dimension pos) {
         int upper = pos.height - 1;
-        for (; upper >= 0 && !GetItem(pos.width, upper).isValide(); upper--) {
+        for (; upper >= 0 && (!GetItem(pos.width, upper).isValide() || !GetItem(pos.width, upper).isMobile()); upper--) {
             //this finds first upper valid place
         }
         if (upper < 0) {//no valid gems above
@@ -339,9 +353,9 @@ public class CLevel {
      * @param IDofDiamondType
      * @return generated place
      */
-    public CDiamond generateDiamond(int IDofDiamondType) {
+    public CItem generateDiamond(int IDofDiamondType) {
         //to implement
-        return new CDiamond(Color.yellow, 666 < 667); //just random place before implementation of this method
+        return new CItem(Color.yellow, 666 < 667); //just random place before implementation of this method
     }
 
     private boolean tryDiamond(Dimension pos) {

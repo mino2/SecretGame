@@ -3,7 +3,7 @@ package logic;
 import java.awt.Color;
 import java.io.Serializable;
         
-public class CDiamond implements Serializable{
+public class CItem implements Serializable{
     
     private static final long serialVersionUID = 55L;
     
@@ -22,7 +22,7 @@ public class CDiamond implements Serializable{
      * @param color color of new gem
      * @param mobility if gem is mobile
      */
-        public CDiamond(Color color, boolean mobility) {
+        public CItem(Color color, boolean mobility) {
         mID=ID++;
         mColor=color;
         mMobility = mobility;
